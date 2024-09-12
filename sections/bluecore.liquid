@@ -1,0 +1,25 @@
+<section class="bluecore page-width">
+  {% if section.settings.bluecore_elements != blank %}
+    {{ section.settings.bluecore_elements }}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Bluecore",
+  "tag": "section",
+  "class": "featured-styles",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "bluecore_elements",
+      "label": "Bluecore Elements"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bluecore"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+<section class="video-section__media no-js-hidden" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="video-section__wrapper">
+    {%- if section.settings.video_url.type == 'youtube' -%}
+      <iframe id="player" src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?autoplay=1&muted=1&enablejsapi=1" class="js-youtube" allow="autoplay; encrypted-media;" allowfullscreen title="{{ section.settings.description | escape }}"></iframe>
+    {%- else -%}
+      <iframe id="player" src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}?autoplay=1&loop=1&autopause=0&muted=1" class="js-vimeo" allow="autoplay; encrypted-media;" muted autoplay allowfullscreen title="{{ section.settings.description | escape }}"></iframe>
+    {%- endif -%}
+  </div>
+
+  <div class="video-section__soundSelect muted" id="section-{{ section.id }}-mute-control">
+    <span class="mute">
+      {% render 'icon-unmute' %}
+    </span>
+    <span class="unmute">
+      {% render 'icon-mute' %}
+    </span>
+  </div>
+</section>
+
+{%- if section.settings.video_url.type == 'youtube' -%}
+<script defer src="https://www.youtube.com/iframe_api"></script>
+<script>
+  function onYouTubeIframeAPIReady() {
+    let player = new YT.Player('player', {
+      videoId: '{{ section.settings.video_url.id }}',
+      playerVars: {
+        'playsinline': 1
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onStateChange
+      }
+    });
+
+    function onPlayerReady(event) {
+      if(typeof player != 'undefined') {
+        player.mute();
+        player.playVideo();
+      }
+    }
+
+    function onStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo();
+      }
+    }
+
+    let muteUnmuteButton = document.getElementById('section-{{ section.id }}-mute-control')
+    muteUnmuteButton.addEventListener('click', () => {
+      if (muteUnmuteButton.classList.contains('muted')) {
+        player.unMute();
+        muteUnmuteButton.classList.remove('muted')
+      } else {
+        player.mute();
+        muteUnmuteButton.classList.add('muted')
+      }
+    })
+  }
+</script>
+{% endif %}
+
+{%- if section.settings.video_url.type == 'vimeo' -%}
+<script defer src="https://player.vimeo.com/api/player.js"></script>
+<script>
+  let playerOptions = {
+    id: '{{ section.settings.video_url.id }}',
+    background: true
+  };
+
+  let player = new Vimeo.Player('player', playerOptions);
+
+  let muteUnmuteButton = document.getElementById('section-{{ section.id }}-mute-control')
+  muteUnmuteButton.addEventListener('click', () => {
+    if (muteUnmuteButton.classList.contains('muted')) {
+      player.setMuted(false);
+      muteUnmuteButton.classList.remove('muted')
+    } else {
+      player.setMuted(true);
+      muteUnmuteButton.classList.add('muted')
+    }
+  })
+</script>
+{% endif %}

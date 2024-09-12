@@ -1,0 +1,102 @@
+{{ 'section-menu-bar.css' | asset_url | stylesheet_tag }}
+
+<div id="menu-bar__wrapper page-width {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};">
+  <ul class="menu-bar__menu list-menu small-hide medium-hide {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}
+            style="color: {{ section.settings.menu_color }};">
+            {{ link.title | escape }}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <details class="menu-bar__container page-width large-up-hide {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+    <summary class="menu-bar__summary link focus-inset" aria-label="{{ section.settings.menu_heading }}" style="color: {{ section.settings.menu_color }};">
+      <span>{{ section.settings.menu_heading }}</span>
+      <span class="icon">{%- render 'icon-arrow-down' -%}</span>
+    </summary>
+    <div class="menu-bar__menu-drawer motion-reduce" tabindex="-1" style="background-color: {{ section.settings.background_color }};">
+      <ul class="menu-bar__menu list-menu" role="list">
+        {%- for link in section.settings.menu.links -%}
+          <li>
+            <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}
+                style="color: {{ section.settings.menu_color }};">
+                {{ link.title | escape }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </details>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {{ section_selector }} .menu-drawer__menu-item {
+    text-decoration-color: {{ section.settings.menu_color_active }};
+  }
+
+  @media screen and (min-width: 989px) {
+    {{ section_selector }} #menu-bar__wrapper {
+      {% if section.settings.background_image %}
+        background-image: url({{ section.settings.background_image | image_url }});
+        background-repeat: no-repeat;
+      {% endif %}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Horizontal menu bar",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "color",
+      "id": "menu_color",
+      "label": "Links color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "menu_color_active",
+      "label": "Active link color"
+    },
+    {
+      "type": "text",
+      "id": "menu_heading",
+      "label": "Menu headline",
+      "default": "Menu headline",
+      "info": "Displays at tablet & mobile resolutions."
+    },
+    {
+      "type": "header",
+      "content": "Background options"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Image",
+      "info": "Optional"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Horizontal menu bar"
+    }
+  ]
+}
+{% endschema %}

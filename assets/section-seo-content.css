@@ -1,0 +1,36 @@
+.seo__section {
+  margin: 5rem auto;
+  padding: 0 6rem;
+}
+
+.seo__content {
+  width: 100%;
+  max-width: 117rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border-top: 0.1rem solid var(--color-border);
+  border-bottom: 0.1rem solid var(--color-border);
+}
+
+.seo__collection-text {
+  width: 100%;
+  max-width: 67rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media screen and (max-width:749px) {
+  .seo__section {
+    padding: 0 2rem;
+  }
+
+  .seo__content {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.seo__section .text-body-small {
+  line-height: 2.2rem;
+  font-weight: 500;
+}

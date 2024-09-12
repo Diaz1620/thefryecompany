@@ -1,0 +1,122 @@
+.features-list .grid {
+  margin-left: -6rem;
+  align-items: baseline;
+}
+
+.features-list .features-list__heading {
+  margin-bottom: 4.5rem;
+}
+
+.page-handle--the-frye-exchange .features-list .features-list__heading {
+  margin-bottom: 2.5rem;
+}
+
+.features-list .grid__item {
+  padding-left: 6rem;
+  padding-bottom: 1rem;
+}
+
+.features-list__content {
+  max-width: 20rem;
+  margin: 0 auto;
+}
+
+.features-list__content .features-list__feature-heading {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  font-weight: 700;
+}
+
+.page-handle--the-frye-exchange .features-list__content .features-list__feature-heading {
+  font-weight: 500;
+}
+
+@media screen and (min-width: 750px) {
+  .page-handle--the-frye-exchange .features-list__content .features-list__feature-heading {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .page-handle--the-frye-exchange .features-list__heading {
+    font-size: 6rem;
+    letter-spacing: 0.1rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .page-handle--the-frye-exchange .features-list__content .features-list__feature-heading {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+  }
+
+  .page-handle--the-frye-exchange .features-list__heading {
+    font-size: 3.5rem;
+    letter-spacing: 0.1rem;
+  }
+}
+
+.features-list__content .features-list__feature-text p {
+  line-height: 2rem;
+}
+
+.features-list__feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-list__feature img {
+  position: relative !important;
+}
+
+@media screen and (max-width: 750px) {
+  .features-list .grid__item {
+    padding-bottom: 3.5rem;
+  }
+
+  .features-list .features-list__heading {
+    margin-bottom: 3.5rem;
+  }
+
+  .features-list__heading {
+    text-align: center;
+  }
+
+  .features-list {
+    text-align: left;
+  }
+
+  .features-list__feature-heading {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .features-list__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+    padding-left: 1.5rem;
+    margin: 0;
+  }
+
+  .features-list__feature {
+    flex-direction: row;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .page-handle--the-frye-exchange .features-list__feature img {
+    max-width: 12rem !important;
+  }
+
+  .page-handle--the-frye-exchange .features-list__content {
+    max-width: unset;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .page-handle--the-frye-exchange .features-list__feature img {
+    max-width: 6rem !important;
+  }
+}

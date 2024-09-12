@@ -1,0 +1,67 @@
+{% comment %}
+    Renders afterpay promo on cart template.
+
+    Usage:
+		{% render 'afterpay-cart' %}
+{% endcomment %}
+
+<style>
+    afterpay-placement {
+        color: var(--sr-brown);
+        text-align: right;
+        --logo-badge-width: 9.4rem;
+    }
+</style>
+
+<afterpay-placement
+    data-locale="en_US"
+    data-currency="USD"
+    data-amount-selector=".totals"
+    data-modal-link-style="circled-info-icon"
+ ></afterpay-placement>
+
+{% comment %} Afterpay messaging styles {% endcomment %}
+<script>
+  window.addEventListener('load', () => {
+    const afterpayPlacement = document.querySelector('afterpay-placement');
+    if (afterpayPlacement) {
+      const afterpayCSS = new CSSStyleSheet();
+      afterpayCSS.replaceSync(`
+        .afterpay-paragraph {
+          font-size: 1.3rem;
+          line-heght: 1.9rem;
+          color: var(--sr-brown);
+          text-align: right;
+          margin-top: .5rem;
+        }
+        
+        .afterpay-logo-link {
+          white-space: nowrap;
+          display: inline-flex;
+          justify-content: right;
+        }
+
+        #logo-link {
+          color: var(--sr-brown);
+          font-size: 1.8rem;
+          font-family: -webkit-pictograph;
+          margin-left: .2rem;
+        } 
+
+        @media screen and (max-width: 749px) {
+          .afterpay-paragraph {
+            text-align: center;
+          }
+          
+          .afterpay-logo-link {
+            justify-content: center;
+          }  
+        }
+      `);
+
+      if (afterpayPlacement.shadowRoot) {
+        afterpayPlacement.shadowRoot.adoptedStyleSheets = [ afterpayCSS ];
+      }
+    }
+  });
+</script>

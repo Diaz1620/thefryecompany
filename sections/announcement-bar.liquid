@@ -1,0 +1,138 @@
+{{ 'section-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+<div id="announcement-bar-wrapper" class="{% if section.blocks.size > 1 %}carousel{% endif %}">
+    {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'announcement' -%}
+        <div id="block-section-{{ block.id }}" class="announcement-bar" style="background-color: {{ block.settings.background_color }};" role="region" aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+          <div class="announcement-bar-inner page-width">      
+            {%- if block.settings.message != blank -%}
+              <p class="announcement-bar__message" style="color: {{ block.settings.text_color }};">{{ block.settings.message }}&nbsp;</p>
+              {%- if block.settings.link_label != blank and block.settings.link_url != blank -%}
+                <a class="announcement-bar__link" href="{{ block.settings.link_url }}" style="color: {{ block.settings.link_color }};">{{ block.settings.link_label }}</a>
+              {%- endif -%}
+              {% if block.settings.announcement_menu != blank %}
+                <div class='announcement-bar_menu-wrapper small-hide medium-hide'>
+                  {% for link in block.settings.announcement_menu.links %}
+                    <a class="announcement-bar__menu" href="{{ link.url }}" style="color: {{ block.settings.menu_link_color }};">{{ link.title }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {%- endif -%}   
+            </div>
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('DOMContentLoaded', () => {
+    const delay = {{section.settings.scroll_speed}} * 1000;
+    const carousel = document.querySelector('#announcement-bar-wrapper.carousel');
+
+    if (carousel) {
+      let flkty = new Flickity( carousel, {
+        wrapAround: true,
+        autoPlay: delay,
+        prevNextButtons: false,
+        pageDots: false
+      });
+    }
+  })
+</script>
+
+{% style %}
+  {%- for block in section.blocks -%}
+    {% assign block_selector = '#block-section-' | append: block.id %}
+
+    {{block_selector}} .announcement-bar__menu:hover {
+      color:{{ block.settings.link_color }}!important;
+  }
+  {%- endfor -%}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Carousel options",
+      "info": "If only one (1) announcement is defined, then the carousel behavior will not be triggered."
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 5,
+      "max": 15,
+      "step": 1,
+      "default": 5,
+      "label": "Slide scroll speed",
+      "info": "Seconds to pause until scrolling to next announcement block."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "message",
+          "default": "Welcome to our store",
+          "label": "Message",
+          "info": "Keep the message short (40 characters) as the overflow will be truncated on mobile."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link url"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "link_color",
+          "label": "Link color",
+          "default": "#0092ff"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#000000"
+        },
+        {
+          "type": "link_list",
+          "id": "announcement_menu",
+          "label": "Announcement right menu"
+        },
+        {
+          "type": "color",
+          "id": "menu_link_color",
+          "label": "Menu color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

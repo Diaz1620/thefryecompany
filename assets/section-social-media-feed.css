@@ -1,0 +1,40 @@
+.social-media-feed header {
+  text-align: center;
+}
+
+.social-media-feed .social-media-feed__heading {
+  margin: 0;
+  line-height: 3rem;
+}
+
+.social-media-feed__description {
+  display: inline-flex;
+  padding: 0 4rem;
+}
+
+.social-media-feed__description .icon-wrap {
+  margin-left: 0.5rem;
+}
+
+.social-media-feed .social-media-feed__description p {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  font-weight: 400 !important;
+}
+
+/* Yotpo integration */
+
+.yotpo-pictures-gallery-title-wrapper {
+  display: none;
+}
+
+.yotpo-pictures-gallery,
+.yotpo-pictures-widget {
+  margin: 0 !important;
+}
+
+.yotpo-wrapper {
+  margin-top: -1rem;
+}

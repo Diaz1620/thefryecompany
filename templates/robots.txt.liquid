@@ -1,0 +1,13 @@
+{% for group in robots.default_groups %}
+  {{- group.user_agent }}
+
+  {%- for rule in group.rules -%}
+    {%- unless rule.directive == 'Disallow' and rule.value == '*/collections/*filter*&*filter*' -%}
+      {{ rule }}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if group.sitemap != blank -%}
+      {{ group.sitemap }}
+  {%- endif -%}
+{% endfor %}

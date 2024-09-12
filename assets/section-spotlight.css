@@ -1,0 +1,201 @@
+.spotlight {
+  display: block;
+  position: relative;
+  text-align: center;
+}
+
+.spotlight a {
+  position: relative;
+  display: block;
+}
+
+.spotlight__heading {
+  width: 100%;
+  font-family: var(--font-body-family);
+  font-weight: 100;
+}
+
+.spotlight__content {
+  display: block;
+  position: relative;
+  text-align: left;
+}
+
+.spotlight__media {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media {
+    margin-bottom: 6rem;
+    align-items: center;
+  }
+
+  .spotlight__media.reverse {
+    flex-direction: row-reverse;
+  }
+}
+
+.spotlight__media-image {
+  width: 100%;
+  max-width: 50%;
+  min-height: 32rem;
+  height: auto;
+  overflow: hidden;
+  object-fit: cover;
+  padding-right: 1rem;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media-image {
+    padding-right: 2rem;
+  }
+
+  .spotlight__media.reverse .spotlight__media-image {
+    padding-right: 0;
+    padding-left: 2rem;
+  }
+}
+
+.spotlight__media-cta {
+  width: 100%;
+  max-width: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media-cta {
+    padding-left: 2rem;
+  }
+
+  .spotlight__media.reverse .spotlight__media-cta {
+    padding-right: 2rem;
+    padding-left: 0;
+  }
+}
+
+.spotlight__media-product-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media-product-info {
+    flex-wrap: nowrap;
+  }
+}
+
+a.spotlight__media-product,
+a.spotlight__media-collection {
+  width: 100%;
+  text-decoration: none;
+}
+
+.spotlight__media-collection {
+  margin-top: 1.5rem;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media-collection {
+    margin-top: 0;
+    margin-left: 2.5rem;
+  }
+}
+
+.spotlight__media-product-image-wrapper,
+.spotlight__media-collection-image-wrapper {
+  position: relative;
+  max-width: 16rem;
+  max-height: 16rem;
+}
+
+@media screen and (min-width: 749px) {
+  .spotlight__media-product-image-wrapper,
+  .spotlight__media-collection-image-wrapper {
+    position: relative;
+    max-width: 26rem;
+    max-height: 26rem;
+  }
+}
+
+.spotlight__media-product-image-wrapper::after,
+.spotlight__media-collection-image-wrapper::after {
+  content: '';
+  display: block;
+  padding: 100%;
+}
+
+.spotlight__media-product-image,
+.spotlight__media-collection-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 989px) {
+  .spotlight__media-product-image-wrapper,
+  .spotlight__media-collection-image-wrapper {
+    max-height: 24rem;
+    min-width: 24rem;
+  }
+}
+
+.spotlight__media-product-title,
+.spotlight__media-collection-title {
+  width: 100%;
+  margin: 0.5rem 0;
+  font-family: var(--font-body-family);
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  text-decoration: none;
+}
+
+@media screen and (min-width: 749px) {
+  .spotlight__media-product-title,
+  .spotlight__media-collection-title {
+    margin: 1rem 0;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    max-width: 24rem;
+  }
+}
+
+.spotlight__media-product-price {
+  width: 100%;
+}
+
+.spotlight__media-product-price .price,
+.spotlight__media-product-price .price--on-sale .price-item.price-item--sale,
+.spotlight__media-product-price .price--on-sale .price-item.price-item--regular {
+  font-family: var(--font-body-family);
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.3rem;
+}
+
+.spotlight__media-product-price .price--on-sale .price-item.price-item--sale {
+  color: rgb(var(--color-base-accent-4));
+}
+
+@media screen and (min-width: 749px) {
+  .spotlight__media-product-price .price,
+  .spotlight__media-product-price .price--on-sale .price-item.price-item--sale,
+  .spotlight__media-product-price .price--on-sale .price-item.price-item--regular {
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+  }
+}

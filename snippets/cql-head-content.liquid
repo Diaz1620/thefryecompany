@@ -1,0 +1,65 @@
+{%- if settings.plp_search_appearance == 'searchspring' -%}
+  {% comment %} Searchspring - preloaded and added as async scripts where needed on critical pages.{% endcomment %}
+  {%- unless template contains "collection" or template contains "search" -%}
+    {% render 'searchspring-script', defer: true %}
+  {%- endunless -%}
+{%- endif -%}
+
+{%- comment -%} Flickity assets {%- endcomment -%}
+<script src="{{ 'flickity.pkgd.min.js' | asset_url }}" defer="defer"></script>
+{{ 'flickity.css' | asset_url | stylesheet_tag }}
+
+{% comment %} Resources to be consumed by frontend apps {% endcomment %}
+<script>
+  window.Resources = {
+    country_code: "{{ localization.country.iso_code }}",
+    searchspring: {
+      shopifyURLs: {
+        fileURL: "{{ 'placeholder.png' | file_url }}",
+        countryOriginBadgeURL: "{{ settings.country_origin | image_url }}",
+        usedProductBadge: "{{ settings.used_product_badge | image_url }}"
+      },
+      results: {
+        currentlyViewing: "{{ 'general.searchspring.currently_viewing' | t }}",
+        loadMore: "{{ 'general.searchspring.load_more' | t }}",
+        viewResults: "{{ 'general.searchspring.view_results' | t }}",
+        noResultsHeading: "{{ 'general.searchspring.no_results_heading' | t }}",
+        noReviews: "{{ 'general.searchspring.no_reviews' | t }}",
+        searchResultsEyebrow: "{{ 'general.searchspring.eyebrow' | t }}",
+        checkSpelling: "{{ 'general.searchspring.check_spelling' | t }}",
+        noResults: "{{ 'general.searchspring.no_results_found' | t }}"
+      },
+      toolbar: {
+        filter: "{{ 'general.searchspring.filter_label' | t }}",
+        sort: "{{ 'general.searchspring.sort_by_label' | t }}",
+      },
+      recommendations: {
+       filterSeeResults: "{{ 'general.searchspring.view_results' | t }}",
+      },
+      autocomplete: {
+        popularProducts: "{{ 'general.search.popular_products' | t }}",
+        recommendedProducts: "{{ 'general.search.recommended_products' | t }}",
+        suggestions: "{{ 'general.search.suggestions' | t }}",
+        topSearches: "{{ 'general.search.top_searches' | t }}",
+        noResultsAutocomplete: "{{ 'general.search.no_results_autocomplete' | t }}",
+        viewAllResults: "{{ 'general.search.view_all' | t }}",
+      }
+    },
+    variantMetafields: {
+      finalSaleLineItem: "properties[{{ settings.final_sale_text }}]"
+    }
+  }
+</script>
+
+{% comment %} AddShoppers Global Tag {% endcomment %}
+<script type="text/javascript">
+  var AddShoppersWidgetOptions = { 'loadCss': false, 'pushResponse': false };
+  (!function(){
+    var t=document.createElement("script");
+    t.type="text/javascript",
+    t.async=!0,
+    t.id="AddShoppers",
+    t.src="https://shop.pe/widget/widget_async.js#637bd435520a9f04e3e7e4d1",
+    document.getElementsByTagName("head")[0].appendChild(t)
+  }());
+</script>

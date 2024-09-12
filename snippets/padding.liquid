@@ -1,0 +1,22 @@
+{% style %}
+.block-{{ id }} {
+    height: 0 !important;
+    margin: 0 !important;
+}
+
+@media screen and (max-width: 750px) {
+    .block-{{ id }} {
+        padding-top: {{ mobile_padding_amount }}px;
+    }
+}
+
+@media screen and (min-width: 749px) {
+    .block-{{ id }} {
+        padding-top: {{ desktop_padding_amount }}px;
+    }
+}
+{% endstyle %}
+
+{% if mobile_padding_amount != blank or desktop_padding_amount != blank %}
+    <div class="block-{{ id }}">&nbsp;</div>
+{% endif %}

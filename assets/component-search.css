@@ -1,0 +1,35 @@
+.search__input.field__input {
+  padding-right: 5rem;
+  border: 0.1rem solid var(--color-styleguide-black);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  font-weight: 500;
+}
+
+.search__input.field__input:hover {
+  box-shadow: none;
+}
+
+.search-modal__form .field__button {
+  right: .5rem;
+}
+
+@media screen and (max-width: 749px) {
+  .search-modal__form .field__button {
+    right: 5rem;
+    top: 1.7rem;
+  }  
+}
+
+.search__button .icon {
+  height: 2rem;
+  width: 2rem;
+  color: var(--color-styleguide-black);
+}
+
+/* Remove extra spacing for search inputs in Safari */
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}

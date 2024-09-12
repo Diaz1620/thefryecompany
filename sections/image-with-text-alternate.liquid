@@ -1,0 +1,585 @@
+{{ 'section-image-with-text-alternate.css' | asset_url | stylesheet_tag }}
+
+<div class="image-with-text-alternate page-width page-width--narrow">
+  <div class="image-with-text-alternate__background">
+
+    {%- if section.settings.background_image != blank -%}
+      <img srcset="
+        {%- if section.settings.background_image.width >= 165 -%}{{ section.settings.background_image | img_url: '165x' }} 165w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 360 -%}{{ section.settings.background_image | img_url: '360x' }} 360w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 535 -%}{{ section.settings.background_image | img_url: '535x' }} 535w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 720 -%}{{ section.settings.background_image | img_url: '720x' }} 720w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 940 -%}{{ section.settings.background_image | img_url: '940x' }} 940w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 1070 -%}{{ section.settings.background_image | img_url: '1070x' }} 1070w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 1500 -%}{{ section.settings.background_image | img_url: '1500x' }} 1500w,{%- endif -%}
+        {%- if section.settings.background_image.width >= 2200 -%}{{ section.settings.background_image | img_url: '2200x' }} 2200w{%- endif -%}"
+        src="{{ section.settings.background_image | img_url: 'master' }}"
+        alt="{{ section.settings.background_image.alt | escape }}"
+        sizes="100vw"
+        loading="lazy"
+        width="{{ section.settings.background_image.width }}"
+        height="{{ section.settings.background_image.height }}"
+        class="small-hide"
+      >
+    {%- endif -%}
+
+    {%- if section.settings.background_image_mobile != blank -%}
+      <img srcset="
+        {%- if section.settings.background_image_mobile.width >= 165 -%}{{ section.settings.background_image_mobile | img_url: '165x' }} 165w,{%- endif -%}
+        {%- if section.settings.background_image_mobile.width >= 360 -%}{{ section.settings.background_image_mobile | img_url: '360x' }} 360w,{%- endif -%}
+        {%- if section.settings.background_image_mobile.width >= 535 -%}{{ section.settings.background_image_mobile | img_url: '535x' }} 535w,{%- endif -%}
+        {%- if section.settings.background_image_mobile.width >= 720 -%}{{ section.settings.background_image_mobile | img_url: '720x' }} 720w,{%- endif -%}
+        {%- if section.settings.background_image_mobile.width >= 940 -%}{{ section.settings.background_image_mobile | img_url: '940x' }} 940w{%- endif -%}"
+        src="{{ section.settings.background_image_mobile | img_url: 'master' }}"
+        alt="{{ section.settings.background_image_mobile.alt | escape }}"
+        sizes="100vw"
+        loading="lazy"
+        width="{{ section.settings.background_image_mobile.width }}"
+        height="{{ section.settings.background_image_mobile.height }}"
+        class="medium-hide large-up-hide"
+      >
+    {%- endif -%}
+  </div>
+
+  <div class="image-with-text-alternate__grid image-with-text-alternate__grid--img-padding-large {{ section.settings.image_size }} {% if section.settings.layout == 'text_first' %} image-with-text-alternate__grid--reverse{% endif %} {% if section.settings.layout_mobile == 'text_first' %} image-with-text-alternate__grid--reverse--col{% endif %} grid grid--gapless grid--1-col grid--2-col-tablet">
+    <div class="grid__item grid__item--padding-large grid__item--image-content {{ section.settings.image_size }}">
+      {% render 'image-with-text-alternate-media' %}
+    </div>
+
+    <div class="grid__item grid__item--text-content {{ section.settings.image_size }}">
+      {% render 'image-with-text-alternate-content' %}
+      {% if section.settings.show_timeline %}<div class="vertical timeline"></div>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {{ section_selector }} .image-with-text-alternate {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    {{ section_selector }} .image-with-text-alternate {
+      {%- if section.settings.mobile_top_padding -%}
+        padding-top: {{ section.settings.mobile_top_padding }}px;
+      {%- endif -%}
+      {%- if section.settings.mobile_bottom_padding -%}
+        padding-bottom: {{ section.settings.mobile_bottom_padding }}px;
+      {%- endif -%}
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    {{ section_selector }} .image-with-text-alternate {
+      {%- if section.settings.desktop_top_padding -%}
+        padding-top: {{ section.settings.desktop_top_padding }}px;
+      {%- endif -%}
+      {%- if section.settings.desktop_bottom_padding -%}
+        padding-bottom: {{ section.settings.desktop_bottom_padding }}px;
+      {%- endif -%}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Image with text alternate",
+  "class": "section-image-with-text-alternate",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Desktop background image",
+      "info": "Covers full screen width."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Mobile background image",
+      "info": "Covers full screen width."
+    },
+    {
+      "type": "header",
+      "content": "Image area"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "4:3 recommended."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "4:3 recommended."
+    },
+    {
+      "type": "header",
+      "content": "Content options"
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content area background color",
+      "default": "#000"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timeline",
+      "default": false,
+      "label": "Display Timeline line below section"
+    },
+    {
+      "type": "header",
+      "content": "Layout options - desktop"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Image first"
+        },
+        {
+          "value": "text_first",
+          "label": "Text first"
+        }
+      ],
+      "default": "image_first",
+      "label": "Display option"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "options": [
+        {
+          "value": "image-narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "image-default",
+          "label": "Default"
+        },
+        {
+          "value": "image-wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "image-default",
+      "label": "Image size option"
+    },
+    {
+      "type": "header",
+      "content": "Layout options - mobile"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Image first"
+        },
+        {
+          "value": "text_first",
+          "label": "Text first"
+        }
+      ],
+      "default": "image_first",
+      "label": "Display option"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_width",
+      "options": [
+        {
+          "value": "mobile-content-default",
+          "label": "Content full width"
+        },
+        {
+          "value": "mobile-content-narrow",
+          "label": "Content narrow"
+        }
+      ],
+      "default": "mobile-content-default",
+      "label": "Mobile content options"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 80
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 80
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 50
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Headline",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Headline"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "frye-headline-2",
+          "options": [
+            {
+              "value": "frye-headline-0",
+              "label": "X-Large"
+            },
+            {
+              "value": "frye-headline-1",
+              "label": "Large"
+            },
+            {
+              "value": "frye-headline-2",
+              "label": "Medium"
+            },
+            {
+              "value": "frye-headline-3",
+              "label": "Small"
+            },
+            {
+              "value": "frye-headline-4",
+              "label": "X-Small"
+            },
+            {
+              "value": "frye-headline-5",
+              "label": "Tiny"
+            },
+            {
+              "value": "frye-headline-6",
+              "label": "Very Tiny"
+            },
+            {
+              "value": "frye-headline-7",
+              "label": "Custom 1"
+            },
+            {
+              "value": "frye-headline-8",
+              "label": "Custom 2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Give customers details about the image or content on the template.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "frye-body",
+          "options": [
+            {
+              "value": "frye-body",
+              "label": "Body - Default"
+            },
+            {
+              "value": "frye-body-small",
+              "label": "Body - Small"
+            },
+            {
+              "value": "text-body-medium",
+              "label": "Body - Medium"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Body - Large"
+            },
+            {
+              "value": "frye-eyebrow",
+              "label": "Eyebrow - Small"
+            },
+            {
+              "value": "frye-eyebrow-large",
+              "label": "Eyebrow - Large"
+            },
+            {
+              "value": "frye-pullquote",
+              "label": "Pullquote"
+            },
+            {
+              "value": "caption",
+              "label": "Caption"
+            }, {
+              "value": "subtitle",
+              "label": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#000000"
+        }
+      ]
+    },
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Eyebrow",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "eyebrow_style",
+          "label": "Eyebrow style",
+          "default": "frye-eyebrow",
+          "options": [
+            {
+              "value": "frye-eyebrow",
+              "label": "Eyebrow - Small"
+            },
+            {
+              "value": "frye-eyebrow-large",
+              "label": "Eyebrow - Large"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "default": "#000000",
+          "label": "Text color"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Button 1 options"
+        },
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "default": "Button label",
+          "label": "Label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "Style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Button Primary"
+            },
+            {
+              "value": "primary-dark",
+              "label": "Button Primary on Dark Background"
+            },
+            {
+              "value": "secondary",
+              "label": "Button Secondary"
+            },
+            {
+              "value": "secondary-dark",
+              "label": "Button Secondary on Dark Background"
+            },
+            {
+              "value": "link-1",
+              "label": "Link to New Page"
+            },
+            {
+              "value": "link-1-dark",
+              "label": "Link to New Page on Dark Background"
+            },
+            {
+              "value": "link-2",
+              "label": "Link to Different Page or Modal"
+            },
+            {
+              "value": "link-2-dark",
+              "label": "Link to Different Page or Modal on Dark Background"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Button 2 options"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "default": "Button label",
+          "label": "Label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Button Primary"
+            },
+            {
+              "value": "primary-dark",
+              "label": "Button Primary on Dark Background"
+            },
+            {
+              "value": "secondary",
+              "label": "Button Secondary"
+            },
+            {
+              "value": "secondary-dark",
+              "label": "Button Secondary on Dark Background"
+            },
+            {
+              "value": "link-1",
+              "label": "Link to New Page"
+            },
+            {
+              "value": "link-1-dark",
+              "label": "Link to New Page on Dark Background"
+            },
+            {
+              "value": "link-2",
+              "label": "Link to Different Page or Modal"
+            },
+            {
+              "value": "link-2-dark",
+              "label": "Link to Different Page or Modal on Dark Background"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Block options"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_side_by_side",
+          "default": false,
+          "label": "Display buttons side-by-side"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_separator",
+          "default": false,
+          "label": "Display buttons separator"
+        },
+        {
+          "type": "color",
+          "id": "separator_color",
+          "label": "Separator color"
+        }
+      ]
+    },
+    {
+      "type": "padding",
+      "name": "Padding",
+      "settings": [
+        {
+          "type": "number",
+          "id": "mobile_padding_amount",
+          "label": "Mobile padding (px)"
+        },
+        {
+          "type": "number",
+          "id": "desktop_padding_amount",
+          "label": "Desktop padding (px)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text alternate",
+      "blocks": [
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

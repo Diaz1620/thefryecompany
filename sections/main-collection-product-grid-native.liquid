@@ -1,0 +1,243 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+
+<link rel="preload" href="{{ 'component-rte.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+  {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+  <div id="main-collection-filters" class="{% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" data-id="{{ section.id }}">
+    <div class="page-width">
+      {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, collapse_on_larger_devices: section.settings.collapse_on_larger_devices, custom_swatches: section.settings.custom_swatch_name  %}
+    </div>
+  </div>
+
+{%- endif -%}
+
+<div id="ProductGridContainer" class="{% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+  <div class="product-count page-width light" role="status">
+    <h2 class="product-count__text text-body">
+      <span id="ProductCount" class="{%- if section.settings.enable_filtering -%}hide-count-product-grid{% endif %}">
+        {%- if collection.results_count -%}
+          {{ 'templates.search.results_with_count' | t: terms: collection.results.terms, count: collection.results_count }}
+        {%- elsif collection.products_count == collections.all_products_count -%}
+          {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+        {%- else -%}
+          {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+        {%- endif -%}
+      </span>
+    </h2>
+  </div>
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    {%- if collection.products.size == 0 -%}
+      <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
+        <div class="loading-overlay gradient"></div>
+        <div class="title-wrapper center">
+          <h2 class="title title--primary">
+            {{ 'sections.collection_template.empty' | t }}<br>
+            {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underlined-link link" }}
+          </h2>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="collection page-width">
+        <div class="loading-overlay gradient"></div>
+
+        {% style %}
+        #product-grid-{{ section.id }}.animated.active {
+          animation-duration: {{section.settings.product_grid_time}};
+          animation-fill-mode: both;
+          -webkit-animation-duration: {{section.settings.product_grid_time}};
+          -webkit-animation-fill-mode: both; 
+        }
+        {% endstyle %}
+
+        <ul id="product-grid-{{ section.id }}" data-id="{{ section.id }}" class="
+          grid grid--2-col negative-margin product-grid animated {{section.settings.product_grid_animation}}
+          {% if collection.products_count < 4 %} grid--{{ collection.products_count }}-col-tablet{% else %}
+            {% if collection.products_count == 4 %} grid--4-col-desktop{% else %} grid--3-col-tablet grid--one-third-max grid--4-col-desktop grid--quarter-max{% endif %}
+          {% endif %}">
+          {%- for product in collection.products -%}
+            {%- comment %}<locksmith:7477>{% endcomment -%}
+              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+            {%- comment %}</locksmith:7477>{% endcomment -%}
+            <li class="grid__item">
+              {% render 'product-card',
+                product_card_product: product,
+                media_size: section.settings.image_ratio,
+                show_secondary_image: section.settings.show_secondary_image,
+                add_image_padding: section.settings.add_image_padding,
+                show_vendor: section.settings.show_vendor,
+                show_image_outline: section.settings.show_image_outline,
+                show_rating: section.settings.show_rating,
+                show_product_labels : section.settings.show_product_labels,
+                image_hover: section.settings.image_hover
+              %}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate, anchor: '' %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "class": "collection-grid-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "header",
+      "content": "Product Card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_image_padding",
+      "default": false,
+      "label": "Add image padding"
+    },
+    {
+      "type": "select",
+      "id": "image_hover",
+      "options": [
+        {
+          "value": "easein",
+          "label": "Ease in"
+        },
+        {
+          "value": "noeffect",
+          "label": "No effect"
+        }
+      ],
+      "default": "noeffect",
+      "label": "Image hover"
+    },
+    {
+      "type": "select",
+      "id": "product_grid_animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "NoEffect",
+      "label": "Select Animation"
+    },
+    {
+      "type": "text",
+      "id": "product_grid_time",
+      "default":"5s",
+      "label": "Animation Time",
+      "info":"Must be a number and include 's' at the end. (Example, 0.2s)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_outline",
+      "default": true,
+      "label": "Show image border"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/os20\/themes-by-shopify\/dawn\/page-types#search-results-show-product-rating)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_labels",
+      "default": true,
+      "label": "Display product labels"
+    },
+    {
+      "type": "header",
+      "content": "Filtering and sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering",
+      "info": "[Customize filters](\/admin\/menus)"
+    },
+    {
+      "type": "text",
+      "id": "custom_swatch_name",
+      "label": "List filters using custom swatches",
+      "info": "Add each filter name that will use custom color swatches, e.g., Color. Multiple filters can use swatches, e.g., `Color, Material`. If the swatches appear to be white or transparent, ensure that an associated image has been uploaded to the Files section of the admin with the naming convention: filter_filterName_filterSwatch.png (filter_color_red.png)."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_on_larger_devices",
+      "default": false,
+      "label": "Collapse on desktop"
+    }
+  ]
+}
+{% endschema %}

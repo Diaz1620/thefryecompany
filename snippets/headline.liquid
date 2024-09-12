@@ -1,0 +1,26 @@
+{% comment %}
+  Renders an headline element with styling.
+
+  Accepts:
+  - text: {text} Text to display
+  - (Optional) seo: {string} Update the h element, if need be.
+  - (Optional) text_style: {select option} Style to apply to text.
+  - (Optional) text_color: {color} Color to apply to text.
+  - (Optional) class: {string} Class attribute for headline.
+
+  Usage:
+  {% render 'headline',
+  text: block.settings.text,
+  text_style: block.settings.text_style,
+  text_color: block.settings.text_color,
+  class: "section-name__headline"
+  %}
+{% endcomment %}
+
+{% unless text == blank %}
+  {% assign element = seo | default: 'h2' %}
+
+  <{{ element }} class="{{ class }} {{ text_style }} {% unless section.settings.animation contains 'No' %} animated{% endunless%} {{ section.settings.animation }}" style="color: {{ text_color }};" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+    {{ text }}
+  </{{ element }}>
+{% endunless %}

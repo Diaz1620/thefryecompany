@@ -1,0 +1,536 @@
+{% if product.tags contains 'used' %}
+  {% assign collection_tag = shop.metafields.recurate['marketplace-tag'] | downcase %}
+  {% assign recurate_used_product = false %}
+  {% if product.tags contains collection_tag %}
+    {% assign recurate_used_product = true %}
+  {% endif %}
+{% endif %}
+
+{% if recurate_used_product == true %}
+  {% if settings.recurate_refurbishment_product_handle != blank %}
+    {% assign refurbishment_product = all_products[settings.recurate_refurbishment_product_handle] %}
+    {% assign refurbishment_variant_id = refurbishment_product.first_available_variant.id %}
+  {% endif %}
+
+  {% assign size_option = 0 %}
+  {% for option in product.options %}
+    {% if option == "Size" %}{% assign size_option_found = true %}{% break %}{% endif %}
+    {% assign size_option = size_option | plus: 1 %}
+  {% endfor %}
+
+  {% capture 'variant_meta_data' %}
+    {% for variant in product.variants %}
+      {
+        id: {{ variant.id }},
+        condition: {% if variant_recurate.condition-description.value contains "Reconditioned:" %}"Reconditioned"{% else %}{{ variant.metafields.recurate.condition | json }}{% endif %}
+      }
+      {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  {% endcapture %}
+
+  <div class="block-variant-list-container {{ block.settings.container_class | split: '\n' | join: ' ' }}" {{ block.shopify_attributes }} id="recurate-variant-table">
+    <div class="variant-list-table">
+      {% assign page_size = 1 %}
+      {% assign counter = 0 %}
+
+      <div class="recurate-variant-table">
+        {%- for variant in product.variants -%}
+          {% if variant.available == false %}
+            {% continue %}
+          {% endif %}
+
+          {% assign counter = counter | plus: 1 %}
+          {% if counter > 3 %}
+            {% assign counter = 0 %}
+            {% assign page_size = page_size | plus: 1 %}
+          {% endif %}
+
+          <div id="row-{{variant.id}}" class="variant-list-items {% if page_size == 1 %}active{% endif %}" data-page="{{ page_size }}">
+            {%- assign featured_media = variant.featured_media | default: product.featured_media -%}
+            {%- assign variant_images = product.images | where: 'alt', featured_media.alt -%}
+            {%- assign variant_recurate = variant.metafields.recurate -%}
+
+            <!-- The Modal Start -->
+            <div id="{{ featured_media.id }}" class="modal image-modal">
+              <!-- Modal Content (The Image) -->
+              <div class="image-modal-content">
+                <!-- The Close Button -->
+                <span class="close image-modal-close">
+                  <a aria-label="Modal close button" href="javascript:" onClick="javascript:Modal.close('{{ featured_media.id }}');">
+                    <img src="/apps/recurate/assets/close-modal.png" alt="close" loading="lazy" width="auto" height="auto" />
+                  </a>
+                </span>
+
+                <div class="modal-container">
+                  <div class="image-div">
+                    {% if variant_images.size > 1 %}
+                      <div class="modal-img-slider modal-img-slider--prev" onclick="plusDivs(+1, 'image-{{variant.id}}')">
+                        <img src="{{ 'icon-caret-up.svg' | asset_url }}" alt="Caret up icon" loading="lazy" width="auto" height="auto" />
+                      </div>
+
+                      {% for image in variant_images %}
+                        <img class="modal-image image-{{variant.id}}" src= "{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}" style="display:{%if forloop.index0 == 0%}block{%else%}none{%endif%}" loading="lazy" width="auto" height="auto">
+                      {% endfor %}
+
+                      <div class="modal-img-slider modal-img-slider--next" onclick="plusDivs(-1, 'image-{{variant.id}}')">
+                        <img src="{{ 'icon-caret-up.svg' | asset_url }}" class="Caret up icon" loading="lazy" width="auto" height="auto"/>
+                      </div>
+                    {% else %}
+                      <img class="modal-image image-{{variant.id}}" src="{{ variant_images.first.src | img_url: 'master' }}" alt="{{ variant_images.first.alt | escape }}" loading="lazy" width="auto" height="auto">
+                    {% endif %}
+                  </div>
+
+                  <div class="right-modal-container">
+                    <div class="modal-variant-details modal-padding">
+                      <h2>{{ product.title }}</h2>
+                      <div class="variant-price">{{ variant.price | money }}</div>
+                      <div class="variant-props">
+                        {% if variant_recurate.seller %}
+                          <div class="variant-prop">
+                            <div class="variant-prop--name">Seller:</div>
+                            <div class="variant-prop--value">{{ variant_recurate.seller }}</div>
+                          </div>
+                        {% endif %}
+                        {% if variant_recurate.shipped-from-city %}
+                          <div class="variant-prop">
+                            <div class="variant-prop--name">Ships from:</div>
+                            <div class="variant-prop--value">{{ variant_recurate.shipped-from-city }}, {{ variant_recurate.shipped-from-state }}</div>
+                          </div>
+                        {% endif %}
+
+                        {%- assign i=0 -%}
+                        {% for option in product.options %}
+                          {% unless option contains 'Sold by' %}
+                            {%- assign val = variant.options[i] | split: '_' -%}
+                            <div class="variant-prop">
+                              <div class="variant-prop--name">{{ option }}:</div>
+                              <div class="variant-prop--value">{{ val[0] }}</div>
+                            </div>
+                          {% endunless %}
+                          {%- assign i = i | plus: 1 -%}
+                        {% endfor %}
+                      </div>
+
+                      <div class="variant-condition">
+                        Condition: <strong>{% if variant_recurate.condition-description.value contains "Reconditioned:" %}Reconditioned{% else %}{{ variant_recurate.condition }}{% endif %}</strong>.
+                        <br>
+                        Seller Description: {% if variant_recurate.condition-description %}{{ variant_recurate.condition-description.value | remove: "Reconditioned:" }}{% endif %}
+                      </div>
+                    </div>
+
+                    {% assign v_recurate_condition = variant_recurate.condition | downcase %}
+
+                    {% if v_recurate_condition contains 'refurbishment' and variant.available %}
+
+                      <div class="modal-refurbishment">
+
+                        <div class="modal-add-refurbishment">
+                          <div class="form-group">
+                            <input type="checkbox" checked="checked" id="input-check-refurbishment_{{ variant.id }}"/>
+                            <label for="input-check-refurbishment_{{ variant.id }}">
+                              Refurbish these pre-owned boots including delivery for {{ refurbishment_product.price | money }}
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="modal-about-refurbishment modal-padding">
+                          This item is eligible for refurbishment by our Frye certified partner, Re-Sole America. Refurbishment consists of removing the original sole and replacing it with new Frye parts and soles, sourced from our own factories. Each pair is then cleaned and polished and shipped straight to your door.
+                        </div>
+
+                        <div class="modal-action-container modal-padding">
+
+                          <div class="modal-button-div">
+                          
+                            <button
+                              class="cart-btn js-AddToCart btn js-recurate-add"
+                              data-variant-id="{{ variant.id }}"
+                              data-is-refurbishment="true"
+                              data-refurbish-id="{{ refurbishment_product.first_available_variant.id }}"
+                              data-container-id="{{ featured_media.id }}"
+                            >
+                              <span data-add-to-cart-text>
+                                PURCHASE FOR {{ variant.price | plus: refurbishment_product.price | money }}
+                              </span>
+                            </button>
+
+                            <p>
+                              <a
+                                href="javascript:"
+                                class="js-recurate-add"
+                                data-variant-id="{{ variant.id }}"
+                                data-container-id="{{ featured_media.id }}"
+                              >
+                                Purchase Without Refurbishment
+                              </a>
+                            </p>
+                          </div> <!--end modal button-->
+                        </div>
+
+                      </div>
+
+                    {% else %}
+
+                      <div class="modal-action-container modal-padding">
+
+                        <div class="modal-button-div">
+                          <button
+                            {% unless variant.available %} aria-disabled="true" {% endunless %}
+                            aria-label="{% unless variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
+                            class="cart-btn js-AddToCart btn js-recurate-add {% if section.settings.enable_payment_button %} btn--secondary-accent{% endif %}"
+                            data-variant-id="{{ variant.id }}"
+                            data-container-id="{{ featured_media.id }}"
+                            {% unless variant.available %} disabled {% endunless %}
+                          >
+                            <span data-add-to-cart-text style="pointer-events: none">
+                              {% unless variant.available %}
+                                {{ 'products.product.sold_out' | t }}
+                              {% else %}
+                                BUY THIS ITEM
+                              {% endunless %}
+                            </span>
+                          </button>
+
+                          <p>
+                            <a
+                              href="javascript:"
+                              onClick="javascript:Modal.close('{{ featured_media.id }}');"
+                            >
+                              Keep shopping
+                            </a>
+                          </p>
+                        </div> <!--end modal button-->
+                      </div> <!--end price container-->
+
+                    {% endif %}
+
+                  </div> <!--end right modal-->
+                </div> <!--end modal container-->
+              </div> <!--image modal content-->
+            </div>
+            <!--The Modal End-->
+
+            <div id="{{ variant.id }}" class="variant-image-wrapper">
+              <img class="variant-featured-image" src= "{{ variant_images.first.src | img_url: '250x', scale: 2}}" alt="featured-image" loading="lazy" width="auto" height="auto">
+            </div>
+
+            <div class="variant-list-item">
+              <div class="variant-list-item--line ">
+                <div>
+                  {% if size_option_found %}
+                    {%- assign size = variant.options[size_option] | split: '_' -%}
+                    Size: {{ size[0] }}
+                  {% endif %}
+                </div>
+                <div class="recurate-price-desktop">
+                  {{ variant.price | money }}
+                </div>
+              </div>
+              
+              <div class="variant-list-item--line">
+                Condition: {% if variant.metafields.recurate.condition-description.value contains "Reconditioned:" %}Reconditioned{% else %}{{ variant.metafields.recurate.condition }}{% endif %}
+              </div>
+
+              <div class="variant-list-item--line">
+                Color: {{ variant.option1 }}
+              </div>
+
+              <div class="recurate-price-mobile">
+                {{ variant.price | money }}
+              </div>
+
+              <div class="variant-list-item--line" onClick='javascript:showDivs(1, "image-{{variant.id}}");'>
+                <button
+                  onClick="javascript:Modal.show('{{ featured_media.id }}');"
+                  class="btn btn-primary"
+                >
+                  View Details
+                </button>
+              </div>
+              
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {% if page_size > 1 %}
+        <div class="variant-list-pagination">
+          {% for i in (1..page_size) %}
+            <div class="page-item {% if i == 1 %}active{% endif %}" data-page="{{ i }}">{{ i }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    var Modal = (function() {
+      let $body = document.querySelector('body');
+      const init = function() {
+        // cache body selector
+        $body = document.querySelector('body');
+      };
+
+      const toggleModal = function(id) {
+        // toggle classes
+        if($body.classList.contains('body-modal-open')) {
+          close(id);
+        } else {
+          show(id);
+        }
+      };
+
+      const show = function(id) {
+        // add modal open class
+        $body.classList.add('body-modal-open');
+
+        // set timeout for active class to allow css animation
+        setTimeout(function() {
+          document.getElementById(id).classList.add('modal-active');
+        }, 25);
+      }
+
+      const close = function(id) {
+        // remove modal open class
+        $body.classList.remove('body-modal-open');
+        // set timeout for active class to allow css animation
+        setTimeout(function() {
+          document.getElementById(id).classList.remove('modal-active');
+        }, 25);
+      };
+
+      return {
+        init: init,
+        toggleModal: toggleModal,
+        show: show,
+        close: close
+      };
+    }());
+
+    // Varinat modal js for slider
+    let slideIndex = 1;
+
+    // used to move slides forward or backwards
+    function plusDivs(n, class_name) {
+      showDivs(slideIndex += n, class_name);
+    }
+
+    // to show the image with given index
+    // all images of same variant have the same class as image-modal-variant_id
+    // after the index>count we reset the counter to 1
+    function showDivs(n, class_name) {
+      let i;
+      const x = document.getElementsByClassName(class_name);
+      if (n > x.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = x.length}
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = 'none';
+      }
+      x[slideIndex-1].style.display = 'block';
+
+      const y = document.getElementsByClassName('modal-slider');
+      for (let j = 0; j < y.length; j++) {
+        y[j].style.display = 'block';
+      }
+    }
+
+    // toggle filters
+    function toggleFilters(){
+      const list = document.getElementById('filter-list')
+      list.style.display = list.style.display === 'block' ? 'none' : 'block';
+      // switch between plus and minus for filter
+      const img_src = document.getElementById('filterImg').src
+      const img_path = img_src.substr(0, img_src.lastIndexOf("/")+1);
+      let new_img = img_src.includes('plus-white.png') ? 'minus.png' : 'plus-white.png'
+      new_img = img_path + new_img;
+      document.getElementById('filterImg').src = new_img;
+    }
+
+    // get the selected checkboxes
+    function getCheckedValues(){
+      const checkedValues = [];
+      const inputElements = document.getElementsByClassName('filterCondition');
+      for(let i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+          checkedValues.push(inputElements[i].value);
+        }
+      }
+      return checkedValues;
+    }
+
+    // filter variants based on the selected conditions
+    // inputs object array containing variant id and condition
+    // if variant condition matches the selected one, hide the unselected items
+    function filter_variants(variants){
+      const checkedValues = getCheckedValues();
+      const filteredVariants = [];
+      const iterator = variants.values()
+      for (let variant of iterator) {
+        if (!checkedValues.length)
+          document.getElementById('row-'+variant['id']).style.display = 'table-row';
+        else if (checkedValues.includes(variant['condition'])){
+          document.getElementById('row-'+variant['id']).style.display = 'table-row';
+        }
+        else
+          document.getElementById('row-'+variant['id']).style.display = 'none';
+      }
+    }
+
+    // when user clicks on swatches for variant options
+    // show the relevant variant
+    function filter_swatches(variant_id){
+      const variants = document.getElementsByClassName('variant-list-items');
+      if (variants.length > 0){
+        for (let i=0 ; i<variants.length ; i++)
+          variants[i].style.display = 'none';
+        document.getElementById('row-'+variant_id).style.display = 'table-row';
+      }
+    }
+
+    function docReady(fn) {
+      // see if DOM is already available
+      if (document.readyState === "complete" || document.readyState === "interactive") {
+        // call on next available tick
+        setTimeout(fn, 1);
+      } else {
+        document.addEventListener("DOMContentLoaded", fn);
+      }
+    }
+
+    docReady(function() {
+      const $pageItems = document.querySelectorAll('.page-item');
+      const $pageArrows = document.querySelectorAll('.variant-list-pagination .page-arrow');
+      const $listItems = document.querySelectorAll('.variant-list-items');
+      $pageItems.forEach((element1) => {
+        element1.addEventListener('click', function() {
+          const currentPage = element1.dataset.page;
+          $pageArrows.forEach((el) => {
+            el.dataset.page = currentPage;
+          })
+          $pageItems.forEach((el) => {
+            el.classList.remove('active');
+          })
+          element1.classList.add('active')
+          $listItems.forEach((el) => {
+            el.classList.remove('active');
+          })
+          const $targetItems = document.querySelectorAll('.variant-list-items[data-page="' + currentPage + '"]');
+          $targetItems.forEach((el) => {
+            el.classList.add('active');
+          })
+        })
+      })
+
+      const $pageArrowPrev = document.querySelector('.page-arrow-prev');
+      if ($pageArrowPrev) {
+        $pageArrowPrev.addEventListener('click', function() {
+          let currentPage = $pageArrowPrev.dataset.page;
+          currentPage = parseInt(currentPage);
+
+          if (currentPage - 1 >= 1) {
+            const targetPage = currentPage - 1;
+
+            $pageArrows.forEach((el) => {
+              el.dataset.page = targetPage;
+            })
+            $pageItems.forEach((el) => {
+              el.classList.remove('active');
+            })
+            document.querySelector('.variant-list-pagination .page-item[data-page="' + targetPage + '"]').classList.add('active');
+            $listItems.forEach((el) => {
+              el.classList.remove('active');
+            })
+            const $targetItems = document.querySelectorAll('.variant-list-items[data-page="' + targetPage + '"]');
+            $targetItems.forEach((el) => {
+              el.classList.add('active');
+            })
+          }
+        });
+      }
+
+      const $pageArrowNext = document.querySelector('.page-arrow-next');
+      if ($pageArrowNext) {
+        $pageArrowNext.addEventListener('click', function() {
+          let currentPage = $pageArrowNext.dataset.page;
+          currentPage = parseInt(currentPage);
+          let maxPage = $pageArrowNext.dataset.pageMax;
+          maxPage = parseInt(maxPage);
+
+          if (currentPage + 1 <= maxPage) {
+            const targetPage = currentPage + 1;
+
+            $pageArrows.forEach((el) => {
+              el.dataset.page = targetPage;
+            })
+            $pageItems.forEach((el) => {
+              el.classList.remove('active');
+            })
+            document.querySelector('.variant-list-pagination .page-item[data-page="' + targetPage + '"]').classList.add('active');
+            $listItems.forEach((el) => {
+              el.classList.remove('active');
+            })
+            const $targetItems = document.querySelectorAll('.variant-list-items[data-page="' + targetPage + '"]');
+            $targetItems.forEach((el) => {
+              el.classList.add('active');
+            })
+          }
+        });
+      }
+
+      // PDP refurbishment option logic
+      const $modal = document.querySelectorAll('.image-modal');
+      $modal.forEach((el) => {
+        const $modalAddRefurbishmentCheckbox = el.querySelector('.modal-add-refurbishment input[type="checkbox"]');
+        const $modalRefurbishmentCTA = el.querySelector('.modal-refurbishment .js-AddToCart');
+
+        if ($modalAddRefurbishmentCheckbox) {
+          $modalAddRefurbishmentCheckbox.addEventListener('change', function() {
+            if ($modalAddRefurbishmentCheckbox.checked) {
+              $modalRefurbishmentCTA.style.display = 'block';
+            } else {
+              $modalRefurbishmentCTA.style.display = 'none';
+            }
+          });
+        }
+      });
+
+      // PDP add recurate item
+      const addItem = (variantId, quantity) => {
+        const cartNotification = document.querySelector('cart-notification');
+        var addData = {
+            'id':variantId, 
+            'quantity':quantity,
+            'sections': cartNotification.getSectionsToRender().map((section) => section.id)
+        }
+                  
+       fetch('/cart/add.js', {
+         body: JSON.stringify(addData),
+         credentials: 'same-origin',
+         headers: {
+           'Content-Type': 'application/json',
+           'X-Requested-With':'xmlhttprequest' 
+         },
+         method: 'POST'
+       }).then(function(response) {
+         return response.json();
+       }).then(function(json) {
+         console.log(json)
+         cartNotification.renderContents(json)
+       }).catch(function(err) {
+         console.log(err)
+       });
+      }
+
+      const $recurateCTAs = document.querySelectorAll('.js-recurate-add');
+      
+      $recurateCTAs.forEach((el) => {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          addItem(e.target.dataset.variantId, 1);
+        });
+      });
+
+    });
+
+  </script>
+
+{% endif %}

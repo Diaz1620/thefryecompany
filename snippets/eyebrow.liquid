@@ -1,0 +1,23 @@
+{% comment %}
+  Renders an eyebrow element with styling.
+
+  Accepts:
+  - text: {text} Text to display
+  - (Optional) text_style: {select option} Style to apply to text.
+  - (Optional) text_color: {color} Color to apply to text.
+  - (Optional) class: {string} Class attribute for eyebrow.
+
+  Usage:
+  {% render 'eyebrow',
+  text: block.settings.text,
+  text_style: block.settings.text_style,
+  text_color: block.settings.text_color,
+  class: "section-name__eyebrow"
+  %}
+{% endcomment %}
+
+{% unless text == blank %}
+  <div class="{{ class }} {{ text_style }} {% unless section.settings.animation contains 'No' %} animated{% endunless%} {{ section.settings.animation }}" style="color: {{ text_color }};" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+    {{ text }}
+  </div>
+{% endunless %}

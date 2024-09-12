@@ -1,0 +1,9 @@
+{% if product.tags contains 'used' %}
+    {% assign collection_name = shop.metafields.recurate['marketplace-name'] %}
+    {% assign collection_tag = shop.metafields.recurate['marketplace-tag'] | downcase %}
+    {% assign recurate_used_product = false %}
+    {% if product.tags contains collection_tag %}
+        {% assign recurate_used_product = true %}
+        {% assign container_class = 'recurate-product-template' %}
+    {% endif %}
+{% endif %}

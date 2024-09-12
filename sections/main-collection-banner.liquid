@@ -1,0 +1,541 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+
+{% if collection.metafields.cql.desktop_image != blank %}
+  {% assign desktopImage = collection.metafields.cql.desktop_image | image_url %}
+{% else %}
+  {% assign desktopImage = collection.image %}
+{% endif %}
+
+{% if collection.metafields.cql.mobile_image != blank %}
+  {% assign mobileImage = collection.metafields.cql.mobile_image | image_url %}
+{% else %}
+  {% assign mobileImage = collection.metafields.cql.desktop_image | image_url | default: collection.image %}
+{% endif %}
+
+
+<div id="Banner-{{ section.id }}" style="background-color: {{ section.settings.section_background_color }};"
+    class="banner banner banner--content-align-{{ section.settings.desktop_content_alignment }}
+    banner--content-align-mobile-{{ section.settings.mobile_content_alignment }}
+    {% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}
+    {% if section.settings.show_container_mobile %} banner--mobile-content{%- endif -%}
+    {% if section.settings.show_text_box == false %} banner--desktop-transparent{%- endif -%}
+    {% if section.settings.hide_section_mobile %} small-hide{%- endif -%}
+    {% if settings.scroll_appear == "fadein" %} fadeIn{%- endif -%}"
+    {% if section.settings.section_url != blank %}
+      onclick="window.location.href='{{ section.settings.section_url }}';"
+      style="background-color: {{ section.settings.section_background_color }}; cursor: pointer;"
+    {% else %}
+      style="background-color: {{ section.settings.section_background_color }};"
+    {% endif %}
+  >
+
+  {%- if desktopImage != blank  -%}
+    {%- render 'image-banner-media', desktop_image: desktopImage, mobile_image: mobileImage -%}
+  {%- endif -%}
+
+  {%- if section.blocks -%}
+  <div class="banner__content {% if section.settings.section_background_color != 'rgba(0,0,0,0)' %} banner__content-container {% else %} banner__content-container-transparent{% endif %} banner__content--{{ section.settings.desktop_content_position }} page-width">
+    {% assign backgroundOpacity = section.settings.content_background_opacity | divided_by: 100.00 %}
+
+    <div class="banner__box
+      {% if section.settings.show_border_desktop %} banner--border{%- endif -%}
+      {% if section.settings.show_border_mobile %} banner--border-mobile{%- endif -%}
+      {% if section.settings.show_border_offset_desktop %} banner--border-offset banner--border-offset-desktop{%- endif -%}
+      {% if section.settings.show_border_offset_mobile %} banner--border-offset banner--border-offset-mobile{%- endif -%}"
+        style="background: {{ section.settings.content_background_color }};
+        background: {{ section.settings.content_background_color | color_to_rgb | color_modify: 'alpha', backgroundOpacity }};">
+
+      {%- render 'image-banner-content', blocks: section.blocks, animation: section.settings.animation -%}
+    </div>
+  </div>
+  {%- endif -%}
+</div>
+
+{% style %}
+  #Banner-{{ section.id }}.banner {
+    background-color: {{ section.settings.section_background_color }};
+  }
+
+  @media only screen and (min-width: 750px) {
+    #Banner-{{ section.id }}.banner,
+    #Banner-{{ section.id }}.banner.banner--mobile-bottom .banner__content,
+    #Banner-{{ section.id }}.banner:not(.banner--mobile-bottom) .banner__content,
+    #Banner-{{ section.id }}.banner--mobile-bottom .banner__media,
+    #Banner-{{ section.id }}.banner--mobile-bottom .banner__media > img {
+      min-height: {{ section.settings.desktop_max_height }}px;
+    }
+  }
+
+  @media only screen and (max-width: 749px) {
+    #Banner-{{ section.id }} .banner--border-mobile::after {
+      border: 0.1rem solid;
+      border-color:{{ section.settings.box_border_color }};
+
+      {% if section.settings.show_border_offset_mobile %}
+        border-radius: 1rem;
+      {% endif %}
+    }
+
+    {% if section.settings.hide_image_mobile %}
+      #Banner-{{ section.id }} .banner__media.media {
+        display: none;
+        visibility: hidden;
+      }
+    {% endif %}
+  }
+
+  @media only screen and (min-width: 750px) {
+    #Banner-{{ section.id }} .banner__box {
+      max-width: {{ section.settings.content_area_max_width }}px;
+    }
+
+    #Banner-{{ section.id }} .banner--border::after {
+      border: 0.1rem solid;
+      border-color: {{ section.settings.box_border_color }};
+      border-radius: 1rem;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "class": "collection-banner",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-collection-banner.settings.paragraph.content"
+    },
+    {
+      "type": "header",
+      "content": "Section background options"
+    },
+    {
+      "type": "paragraph",
+      "content": "Desktop background image is the collection's featured image. Mobile background image is the collection's metafield: Featured Image: Mobile."
+    },
+    {
+      "type": "number",
+      "id": "desktop_max_height",
+      "label": "Desktop background area maximum size (px)",
+      "default": 640
+    },
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "section_background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content container color"
+    },
+    {
+      "type": "color",
+      "id": "box_border_color",
+      "label": "Container border color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Content area options"
+    },
+    {
+      "type": "paragraph",
+      "content": "If unchecked, the content area won't have a background. Ensure the content has high contrast against the image."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_text_box",
+      "label": "Show container background on desktop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_container_mobile",
+      "label": "Show container background on mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "content_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "label": "Content container opacity",
+      "info": "If using opacity and mobile display text below image, select a section background color."
+    },
+    {
+      "type": "number",
+      "id": "content_area_max_width",
+      "label": "Desktop content area maximum size (px)",
+      "default": 400
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_desktop",
+      "default": false,
+      "label": "Show container border on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_offset_desktop",
+      "default": false,
+      "label": "Offset container border on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_mobile",
+      "default": false,
+      "label": "Show container border on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_offset_mobile",
+      "default": false,
+      "label": "Offset container border on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top Left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top Center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top Right"
+        },
+        {
+          "value": "middle-left",
+          "label": "Middle Left"
+        },
+        {
+          "value": "middle-center",
+          "label": "Middle Center"
+        },
+        {
+          "value": "middle-right",
+          "label": "Middle Right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom Left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom Center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom Right"
+        }
+      ],
+      "default": "middle-center",
+      "label": "Desktop content position"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Desktop content alignment"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile content alignment"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_text_below",
+      "default": true,
+      "label": "Show content below image"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_image_mobile",
+      "label": "Hide background image on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Other section options"
+    },
+    {
+      "type": "url",
+      "id": "section_url",
+      "label": "Section link",
+      "info": "Makes entire section a clickable link."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_section_mobile",
+      "label": "Hide section on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Block animations"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "fadeInLeft",
+          "label": "Fade In Left"
+        },
+        {
+          "value": "fadeInRight",
+          "label": "Fade In Right"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "NoEffect",
+      "label": "Select Animation"
+    },
+    {
+      "type": "text",
+      "id": "animation_time",
+      "default": "0.2s",
+      "label": "Animation Time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+    }
+  ],
+  "blocks":
+  [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "default": "Eyebrow",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "eyebrow_style",
+          "label": "Eyebrow style",
+          "default": "eyebrow",
+          "options": [
+            {
+              "value": "eyebrow",
+              "label": "Eyebrow - Small"
+            },
+            {
+              "value": "eyebrow-large",
+              "label": "Eyebrow - Large"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "eyebrow_color_desktop",
+          "label": "Eyebrow color - desktop"
+        },
+        {
+          "type": "color",
+          "id": "eyebrow_color_mobile",
+          "label": "Eyebrow color - mobile"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Headline",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Image banner",
+          "label": "Headline"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h0",
+              "label": "Headline 0"
+            },
+            {
+              "value": "h1",
+              "label": "Headline 1"
+            },
+            {
+              "value": "h2",
+              "label": "Headline 2"
+            },
+            {
+              "value": "h3",
+              "label": "Headline 3"
+            },
+            {
+              "value": "h4",
+              "label": "Headline 4"
+            },
+            {
+              "value": "h5",
+              "label": "Headline 5"
+            },
+            {
+              "value": "h6",
+              "label": "Headline 6"
+            },
+            {
+              "value": "h7",
+              "label": "Headline 7"
+            },
+            {
+              "value": "h8",
+              "label": "Headline 8"
+            },
+            {
+              "value": "h9",
+              "label": "Headline 9"
+            },
+            {
+              "value": "h10",
+              "label": "Headline 10"
+            },
+            {
+              "value": "h11",
+              "label": "Headline 11"
+            }
+          ],
+          "default": "h0",
+          "label": "Headline size"
+        },
+        {
+          "type": "color",
+          "id": "heading_color_desktop",
+          "label": "Headline color - desktop"
+        },
+        {
+          "type": "color",
+          "id": "heading_color_mobile",
+          "label": "Headline color - mobile"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Give customers details about the banner image(s) or content on the template.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "text-body",
+          "options": [
+            {
+              "value": "text-body",
+              "label": "Body - Default"
+            },
+            {
+              "value": "text-body-small",
+              "label": "Body - Small"
+            },
+            {
+              "value": "text-body-medium",
+              "label": "Body - Medium"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Body - Large"
+            },
+            {
+              "value": "caption",
+              "label": "Caption"
+            },
+            {
+              "value": "subtitle",
+              "label": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color_desktop",
+          "label": "Description color - desktop"
+        },
+        {
+          "type": "color",
+          "id": "text_color_mobile",
+          "label": "Description color - mobile"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

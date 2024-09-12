@@ -1,0 +1,336 @@
+{{ 'component-rte.css' | asset_url | stylesheet_tag }}
+{{ 'section-social-media-feed.css' | asset_url | stylesheet_tag }}
+
+<div id="social-media-feed-{{section.id}}" class="{% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};" data-section-id="{{ section.id }}" data-section-type="social-media">
+  <div class="social-media-feed-container">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <header id="heading-{{section.id}}">
+        {% style %}
+          #social-media-feed-{{ section.id}}.social-media-feed__heading.animated.active {
+            animation-duration: {{ section.settings.media_text_time}};
+            animation-fill-mode: both;
+            -webkit-animation-duration: {{ section.settings.media_text_time}};
+            -webkit-animation-fill-mode: both;
+          }
+        {%endstyle%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="social-media-feed__heading animated {{section.settings.media_text_animation}} rte {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          {%- capture icon -%}
+            <span class="icon-wrap">&nbsp;{% render 'icon-arrow' %}</span>
+          {%- endcapture %}
+          {% assign descriptionTextSize = section.settings.description.size | minus: 4 %}
+          {% assign descriptionContent = section.settings.description | slice: 0, descriptionTextSize %}
+          {% assign descriptionContent = descriptionContent | append: icon | append: '</p>' %}
+
+          <div class="social-media-feed__description rte {{ section.settings.text_style }}">
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" class="button button--link-1">{{ descriptionContent }}</a>
+            {% else %}
+              {{ descriptionContent }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {% if section.settings.integration != blank %}
+      <div class="yotpo-wrapper page-width">
+        {{ section.settings.integration }}
+      </div>
+    {% else %}
+      <div class="social-media-feed__content rte grid grid--2-col {% if section.blocks.size == 4 %} grid--2-col-tablet grid--4-col-desktop{% else %} grid--3-col-tablet{% endif %}">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'media_item' -%}
+              {% style %}
+                #media-{{ block.id}}.animated.active {
+                  animation-duration: {{ block.settings.image_time}};
+                  animation-fill-mode: both;
+                  -webkit-animation-duration: {{ block.settings.image_time}};
+                  -webkit-animation-fill-mode: both;
+                }
+                .social-media-feed__item--hover-added img {
+                  transition: all 0.4s ease-in;
+                }
+                .social-media-feed__item--hover-added:hover img {
+                  transform: scale(1.3);
+                  transition: all 0.4s ease-in;
+                }
+              {%endstyle%}
+              <a id="media-{{block.id}}" {% if block.settings.link == blank %} role="link"aria-disabled="true"{% else %} href="{{ block.settings.link }}"{% endif %} class="social-media-feed__item grid__item animated {{block.settings.image_animation}} {% if block.settings.add_hover==true %} social-media-feed__item--hover-added {% endif%}">
+                <div class="media media--transparent media--square media--hover-effect">
+                  {% render 'image', image: block.settings.image, image_max_width: 1066 %}
+                </div>
+              </a>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {% if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+    {{ section_selector }} .social-media-feed__heading,
+    {{ section_selector }} .social-media-feed-container {
+      color: {{ section.settings.heading_color }};
+    }
+  {% endif %}
+
+  {% if section.settings.text_color != 'rgba(0,0,0,0)' %}
+    {{ section_selector }} .social-media-feed__description {
+      color: {{ section.settings.text_color }};
+    }
+  {% endif %}
+
+  @media screen and (max-width: 749px) {
+    {{ section_selector }}.social-media-feed {
+      padding-top: {{ section.settings.mobile_top_padding }}px;
+      padding-bottom: {{ section.settings.mobile_bottom_padding }}px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    {{ section_selector }}.social-media-feed {
+      padding-top: {{ section.settings.desktop_top_padding }}px;
+      padding-bottom: {{ section.settings.desktop_bottom_padding }}px;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: initial;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+  {
+    "name": "Social Media Feed",
+    "tag": "section",
+    "class": "social-media-feed",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Headline"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+          {
+            "value": "frye-headline-0",
+            "label": "X-Large"
+          },
+          {
+            "value": "frye-headline-1",
+            "label": "Large"
+          },
+          {
+            "value": "frye-headline-2",
+            "label": "Medium"
+          },
+          {
+            "value": "frye-headline-3",
+            "label": "Small"
+          }, {
+            "value": "frye-headline-4",
+            "label": "X-Small"
+          }, {
+            "value": "frye-headline-5",
+            "label": "Tiny"
+          }, {
+            "value": "frye-headline-6",
+            "label": "Very Tiny"
+          }, {
+            "value": "frye-headline-7",
+            "label": "Custom 1"
+          }, {
+            "value": "frye-headline-8",
+            "label": "Custom 2"
+          }
+        ],
+        "default": "frye-headline-2",
+        "label": "Headline size"
+      },
+      {
+        "type": "header",
+        "content": "Section description"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Text"
+      }, {
+        "type": "select",
+        "id": "text_style",
+        "label": "Text style",
+        "default": "frye-body",
+        "options": [
+          {
+            "value": "frye-body",
+            "label": "Body - Default"
+          },
+          {
+            "value": "frye-body-small",
+            "label": "Body - Small"
+          },
+          {
+            "value": "text-body-medium",
+            "label": "Body - Medium"
+          },
+          {
+            "value": "text-body-large",
+            "label": "Body - Large"
+          }, {
+            "value": "frye-eyebrow",
+            "label": "Eyebrow"
+          }, {
+            "value": "frye-pullquote",
+            "label": "Pullquote"
+          }, {
+            "value": "caption",
+            "label": "Caption"
+          }, {
+            "value": "subtitle",
+            "label": "Subtitle"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Third-Party integration"
+      }, {
+        "type": "liquid",
+        "id": "integration",
+        "label": "Integration code",
+        "info": "Depends on third-party provider"
+      }, {
+        "type": "header",
+        "content": "Section colors"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color"
+      }, {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "number",
+        "id": "desktop_top_padding",
+        "label": "Desktop top padding (px)",
+        "default": 60
+      }, {
+        "type": "number",
+        "id": "desktop_bottom_padding",
+        "label": "Desktop bottom padding (px)",
+        "default": 60
+      }, {
+        "type": "number",
+        "id": "mobile_top_padding",
+        "label": "Mobile top padding (px)",
+        "default": 45
+      }, {
+        "type": "number",
+        "id": "mobile_bottom_padding",
+        "label": "Mobile bottom padding (px)",
+        "default": 45
+      }, {
+        "type": "header",
+        "content": "Section animation"
+      }, {
+        "type": "select",
+        "id": "media_text_animation",
+        "options": [
+          {
+            "value": "fadeIn",
+            "label": "Fade In"
+          }, {
+            "value": "fadeInUp",
+            "label": "Fade In Up"
+          }, {
+            "value": "NoEffect",
+            "label": "No Effect"
+          }
+        ],
+        "default": "NoEffect",
+        "label": "Select Text Animation"
+      }, {
+        "type": "text",
+        "id": "media_text_time",
+        "default": "0.2s",
+        "label": "Text Animation Time",
+        "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "media_item",
+        "name": "Media item",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Media image"
+          },
+          {
+            "type": "checkbox",
+            "id": "add_hover",
+            "label": "Add hover on Image?",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Media link"
+          },
+          {
+            "type": "select",
+            "id": "image_animation",
+            "options": [
+              {
+                "value": "fadeIn",
+                "label": "Fade In"
+              }, {
+                "value": "fadeInUp",
+                "label": "Fade In Up"
+              }, {
+                "value": "NoEffect",
+                "label": "No Effect"
+              }
+            ],
+            "default": "NoEffect",
+            "label": "Select Image Animation"
+          }, {
+            "type": "text",
+            "id": "image_time",
+            "default": "0.2s",
+            "label": "Image Animation Time",
+            "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "category": "Image",
+        "name": "Social Media Feed",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}

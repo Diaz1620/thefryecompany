@@ -1,0 +1,46 @@
+{{ 'template-search.css' | asset_url | stylesheet_tag }}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-search.css' | asset_url | stylesheet_tag }}</noscript>
+
+<script>
+  window.ssConfig = {
+    ...window.ssConfig,
+    pageSize: {{ section.settings.products_per_page }}
+  }
+</script>
+{%- if settings.plp_search_appearance == 'searchspring' -%}
+  <div class="template-search">  
+    <div id="searchspring-content"></div>
+  </div>
+
+  {% render 'searchspring-script' %}
+{%- endif -%}
+
+{%- if settings.plp_search_appearance == 'nosto' -%}
+  <div id="nosot-content"></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 24,
+      "label": "Products per page"
+    }
+  ]
+}
+{% endschema %}

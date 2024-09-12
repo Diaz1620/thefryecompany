@@ -1,0 +1,56 @@
+<script id="filterHelpers" type="application/json">
+  {
+    {%- for block in section.blocks -%}
+      "{{ block.settings.title | strip | downcase }}": {
+        "filterHelper": {{ block.settings.color_options | strip_html | split: ", " | json }}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  }
+  </script>
+
+  <script>
+    const colorMap = document.querySelector('#filterHelpers')
+
+    window.Resources.colorMap = colorMap
+  </script>
+
+  <script>
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', () => {
+        document.dispatchEvent(new Event('helpers:update'));
+      });
+    }
+  </script>
+
+  {% schema %}
+  {
+    "name": "Content: Filter helpers",
+    "class": "hidden",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "This section allows for the global management of filter helpers for generic color display on collection pages. Add blocks to configure helpers."
+      }
+    ],
+    "blocks": [
+      {
+        "type": "helper",
+        "name": "Helper",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Option name",
+            "info": "Case insensitive name of generic color. e.g. Red."
+          },
+          {
+            "type": "richtext",
+            "id": "color_options",
+            "label": "Color specific name(s)",
+            "info": "Comma-delimited list of specific color names, e.g., Lipstick"
+          }
+        ]
+      }
+    ]
+  }
+  {% endschema %}

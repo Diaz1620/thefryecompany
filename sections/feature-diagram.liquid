@@ -1,0 +1,573 @@
+{{ 'section-feature-diagram.css' | asset_url | stylesheet_tag }}
+{% style %}
+#feature-diagram-{{section.id}} .feature-diagram__head.animated.active,
+.featured-diagram .featured-diagram_header.animated.active {
+  animation-duration: {{section.settings.diagram_head_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.diagram_head_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+#feature-diagram-{{section.id}} .feature-diagram__main-image-wrapper.animated.active,
+.featured-diagram .featured-diagram_image.animated.active {
+  animation-duration: {{section.settings.diagram_img_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.diagram_img_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+#feature-diagram-{{section.id}} .feature-diagram__feature-slider-wrapper.animated.active,
+.featured-diagram .featured-diagram_image.animated.active {
+  animation-duration: {{section.settings.diagram_text_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.diagram_text_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+
+@keyframes slidefadeInLeft {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.flickity-slider .feature {
+    opacity: 0 !important;
+}
+
+.flickity-slider .feature.is-selected {
+    z-index: 99;
+    opacity: 1 !important;
+    animation: slidefadeInLeft ease 2s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 2s;
+}
+
+{% endstyle %}
+
+{% capture flickity_options %}
+  {
+    "cellAlign": "left",
+    "contain": true,
+    "pageDots": false,
+    "prevNextButtons": false,
+    "wrapAround": true,
+    "adaptiveHeight": true
+  }
+{% endcapture %}
+
+{% if section.settings.carousel %}
+
+<div id="feature-diagram-{{section.id}}" class="feature-diagram__outer-wrapper {% if settings.scroll_appear == "fadein" %} fadeIn{% endif %}" style="background-color: {{ section.settings.diagram__background_color }};">
+  <div class="feature-diagram__inner-wrapper" id="{{ section.id }}">
+    <div class="feature-diagram__head animated {{section.settings.diagram_head_animation}}">
+      <h2 class="feature-diagram__heading" style="color: {{ section.settings.diagram__heading_color }};">{{ section.settings.diagram__heading }}</h2>
+      <div class="paragraph" style="color: {{ section.settings.diagram__text_color }};">{{ section.settings.diagram__description }}</div>
+    </div>
+    <div class="feature-diagram__body">
+      <div class="feature-diagram__body-inner-wrapper">
+        <div class="feature-diagram__main-image-wrapper animated {{section.settings.diagram_img_animation}} {% if section.settings.image_hover == 'easein' %} hoverAnimation {% endif %}">
+          <img src="{{ section.settings.diagram__image | image_url: width: 600 }}" loading="lazy" alt="{{ section.settings.diagram__image.alt }}" width="{{ section.settings.diagram__image.width }}" height="{{ section.settings.diagram__image.height }}" class="feature-diagram__image">
+          <div class="feature-diagram__feature-selectors" style="aspect-ratio: {{ section.settings.diagram__image.aspect_ratio }};">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when "feature_carousel" %}
+                {% assign slide_number = forloop.index0 | plus: 1 %}
+                  <button
+                    class="feature-diagram__feature-selector {% if forloop.index0 == 0 %}selected{% endif %}"
+                    data-feature-id="{{ block.id }}"
+                    data-feature-key="{{ forloop.index0 }}"
+                  >{{ slide_number }}</button>
+                {% else %}
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-diagram__feature-slider-wrapper animated {{section.settings.diagram_img_animation}}" style="background-color: {{ section.settings.diagram__background_color }};">
+        <div class="feature-diagram__feature-slider" data-flickity='{{ flickity_options }}'>
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when "feature_carousel" %}
+                <div class="feature-diagram__feature-body feature">
+                  <div class="feature__inner-wrapper">
+                    {% if block.settings.icon != blank %}
+                      {% assign img_width = block.settings.icon.width %}
+                      {% if block.settings.icon_width != blank and block.settings.icon_width != 0 %}
+                        {% assign img_width = block.settings.icon_width %}
+                      {% endif %}
+
+                      <div class="feature__image-wrapper {% if block.settings.image_hover == 'easein' %} hoverAnimation {% endif %}">
+                        <img
+                          src="{{ block.settings.icon | image_url: width: 160 }}"
+                          loading="lazy"
+                          alt="{{ block.settings.icon.alt }}"
+                          width="{{ img_width }}"
+                          height="{{ img_width | divided_by: block.settings.icon.aspect_ratio | ceil }}"
+                          class="feature__image"
+                        >
+                      </div>
+                    {% endif %}
+                    <div class="feature__body-wrapper {% if block.settings.icon == blank %} no-icon {% endif %}">
+                      <h4 class="feature__heading headline3" style="color: {{ section.settings.diagram__heading_color }};">{{ block.settings.heading }}</h4>
+                      <div class="feature__body paragraph" style="color: {{ section.settings.diagram__heading_color }};">{{ block.settings.description }}</div>
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+        <div class="feature__prev-next">
+          <button class="flickity-button flickity-prev-next-button previous" type="button" aria-label="Previous">
+            {% render 'icon-caret' %}
+          </button>
+          <div class="feature__slide-indicator headline5">
+            <span class="feature__slide-index current-slide-index">1</span>/{{ section.blocks.size }}
+          </div>
+          <button class="flickity-button flickity-prev-next-button next" type="button" aria-label="Next">
+            {% render 'icon-caret' %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% style %}
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when "feature_carousel" -%}
+        #feature-diagram-{{section.id}} .feature-diagram__feature-selector[data-feature-id="{{ block.id }}"] {
+          left: {{ block.settings.h_pos }}%;
+          top: {{ block.settings.v_pos }}%;
+        }
+
+        #feature-diagram-{{section.id}} .feature-diagram__feature-selector,
+        #feature-diagram-{{section.id}} .feature-diagram__feature-selector.selected,
+        #feature-diagram-{{section.id}} .feature-diagram__feature-selector:hover {
+          border: 0.4rem solid {{ section.settings.diagram__selectors_color }};
+          background-color: {{ section.settings.diagram__selectors_color }};
+          color: {{ section.settings.diagram__selectors_text_color }};
+        }
+
+        #feature-diagram-{{section.id}} .flickity-button:hover {
+          color: {{ section.settings.diagram__selectors_nav_color }};
+        }
+    {%- endcase -%}
+  {%- endfor -%}
+{% endstyle %}
+
+<script type="text/javascript">
+  window.onload = function () {
+    let featureCarousel = new Flickity('#{{ section.id }} .feature-diagram__feature-slider')
+    let featureButtons = document.querySelectorAll('#{{ section.id }} .feature-diagram__feature-selector')
+
+    for ( let featureButton of featureButtons ) {
+      featureButton.addEventListener('click', () => {
+        featureCarousel.select( parseInt(featureButton.dataset.featureKey) )
+      })
+    }
+
+    featureCarousel.on( 'change', function( index ) {
+      let currentSelector = document.querySelector('#{{ section.id }} .feature-diagram__feature-selector[data-feature-key="' + (index) + '"]')
+      let featureButtons = document.querySelectorAll('#{{ section.id }} .feature-diagram__feature-selector')
+      let featureSldieIndex = document.getElementsByClassName('current-slide-index')[0]
+
+      for ( let featureButton of featureButtons ) {
+        featureButton.classList.remove('selected')
+      }
+
+      currentSelector.classList.add('selected')
+      featureSldieIndex.innerHTML = parseInt(index) + 1
+    });
+
+    let navButtons = document.querySelectorAll('.feature__prev-next .flickity-button, .feature__prev-prev .flickity-button')
+
+    for ( let navButton of navButtons ) {
+      navButton.addEventListener('click', () => {
+        if ( navButton.classList.contains('next') ) {
+          featureCarousel.next();
+        } else {
+          featureCarousel.previous();
+        }
+      })
+    }
+
+    window.dispatchEvent(new Event('resize'));
+  }
+</script>
+
+{% else %}
+
+<div class="featured-diagram {% if settings.scroll_appear == "fadein" %} fadeIn{% endif %}">
+  <div class="page-width">
+    <div class="featured-diagram_header animated {{section.settings.diagram_head_animation}}">
+
+      {% if section.settings.diagram__heading != blank %}
+        <h1 class="featured-diagram_heading">{{ section.settings.diagram__heading }} </h1>
+      {% endif %}
+
+      {% if section.settings.diagram__description != blank %}
+        <div class="featured-diagram_description" >{{ section.settings.diagram__description  }}</div>
+      {% endif %}
+    </div>
+
+    <div class="featured-diagram_image_wrapper">
+      {% if section.settings.diagram__image != blank %}
+          <div class="featured-diagram_image animated {{section.settings.diagram_head_animation}}">
+            <div class="HighlightImage {% if section.settings.image_hover == 'easein' %} hoverAnimation {% endif %}">
+              <img
+                  class="diagram_image"
+                  data-sizes="auto"
+                  src="{{ section.settings.diagram__image | image_url: width: 600}}"
+                  alt="{{ section.settings.diagram__image.alt | default: shop.name | escape  }}"
+                  width="{{ section.settings.diagram__image.width }}"
+                  height="{{ section.settings.diagram__image.height }}"
+                  loading="lazy"
+              />
+            </div>
+          </div>
+      {% endif %}
+
+      <div class="FeaturesList__wrapper">
+        <div class="FeaturesList">
+          {% for block in section.blocks %}
+            {% assign feature_title = block.settings.icon_heading %}
+            {% assign feature_description = block.settings.icon_description %}
+            {% assign feature_icon = block.settings.icon_image %}
+              {% if feature_title != blank %}
+                <div id="feature-text-list-{{block.id}}" class="feature_wrapper animated {{block.settings.list_text_animation}}">
+                {% style %}
+                  #feature-text-list-{{block.id}}.feature_wrapper.animated.active {
+                    animation-duration: {{block.settings.list_text_animation_time}};
+                    animation-fill-mode: both;
+                    -webkit-animation-duration: {{block.settings.list_text_animation_time}};
+                    -webkit-animation-fill-mode: both;
+                  }
+                {% endstyle %}
+                  {% if feature_icon != blank %}
+                  <div class="feature_icon {% if block.settings.image_hover == 'easein' %} hoverAnimation_featured_diagram-feature {% endif %}">
+                      <img src="{{ feature_icon | image_url: width: 120 }}"
+                          data-sizes="auto"
+                          alt="{{ feature_icon.alt | default: shop.name | escape  }}"
+                          width="{{ feature_icon.width }}"
+                          height="{{ feature_icon.height }}"
+                          loading="lazy"
+                      />
+                  </div>
+                  {% endif %}
+                  <div class="FeaturesList__Text">
+                          <h3 class="Heading feature-title">{{ feature_title }}</h3>
+                      {% if feature_description != blank %}
+                          <div class="feature-description">{{ feature_description }}</div>
+                      {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% style %}
+  {% if section.settings.diagram__text_color %}
+      .featured-diagram_image_wrapper, .featured-diagram_image_wrapper .Heading, .featured-diagram_description, .feature__slide-indicator {
+          color: {{ section.settings.diagram__text_color }};
+      }
+  {% endif %}
+
+  {% if section.settings.diagram__heading_color %}
+      .featured-diagram_heading  {
+          color: {{ section.settings.diagram__heading_color }};
+      }
+  {% endif %}
+
+  {% if section.settings.diagram__background_color %}
+      .featured-diagram {
+        background-color: {{ section.settings.diagram__background_color }};
+      }
+  {% endif %}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Featured diagram",
+  "tag": "section",
+  "max_blocks": 12,
+  "class": "page-width section-featured-diagram",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "diagram__image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "diagram_img_animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "fadeInUp",
+      "label": "Select Slide Animation"
+    },
+    {
+      "type": "text",
+      "id": "diagram_img_animation_time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)",
+      "default":"4s",
+      "label": "Select Image Animation Time"
+    },
+    {
+      "type": "text",
+      "id": "diagram_text_animation_time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)",
+      "default":"4s",
+      "label": "Select Slider Text Time"
+    },
+    {
+      "type": "select",
+      "id": "image_hover",
+      "options": [
+        {
+          "value": "easein",
+          "label": "Ease in"
+        },
+        {
+          "value": "noeffect",
+          "label": "No effect"
+        }
+      ],
+      "default": "noeffect",
+      "label": "Image hover"
+    },
+    {
+      "type": "text",
+      "id": "diagram__heading",
+      "label": "Heading",
+      "default": "Heading",
+      "info": "Enter section heading here."
+    },
+    {
+      "type": "richtext",
+      "id": "diagram__description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "diagram_head_animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "fadeInUp",
+      "label": "Select Headline Animation"
+    },
+    {
+      "type": "text",
+      "id": "diagram_head_animation_time",
+      "default":"0.2s",
+      "label": "Select Headline Animation Time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+    },
+    {
+      "type": "color",
+      "id": "diagram__background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "diagram__heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "diagram__text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "diagram__selectors_color",
+      "label": "Selector dots color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "diagram__selectors_text_color",
+      "label": "Selector dots text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "diagram__selectors_nav_color",
+      "label": "Carousel nav color",
+      "default": "#ffffff"
+    },
+    {
+     "type": "checkbox",
+     "id": "carousel",
+     "label": "Display blocks as carousel",
+     "default": false,
+     "info": "If this is checked make sure you use Feature Carousel blocks and hide Feature blocks"
+   }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+          {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "icon_heading",
+            "label": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "icon_description",
+            "label": "Icon description"
+          },
+          {
+            "type": "select",
+            "id": "image_hover",
+            "options": [
+              {
+                "value": "easein",
+                "label": "Ease in"
+              },
+              {
+                "value": "noeffect",
+                "label": "No effect"
+              }
+            ],
+            "default": "noeffect",
+            "label": "Image hover"
+          },
+          {
+          "type": "select",
+          "id": "list_text_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "fadeInUp",
+          "label": "Select Block Animation"
+        },
+        {
+          "type": "text",
+          "id": "list_text_animation_time",
+          "label": "Select Text Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)",
+          "default":"0.2s"
+        }
+      ]
+    },
+    {
+      "name": "Feature carousel",
+      "type": "feature_carousel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (optional)"
+        },
+        {
+          "type": "number",
+          "id": "icon_width",
+          "label": "Icon width (px)",
+          "default": 160,
+          "info": "If left blank, will use the native width of the image."
+        },
+        {
+          "type": "range",
+          "id": "v_pos",
+          "label": "Selector vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "range",
+          "id": "h_pos",
+          "label": "Selector horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "select",
+          "id": "image_hover",
+          "options": [
+            {
+              "value": "easein",
+              "label": "Ease in"
+            },
+            {
+              "value": "noeffect",
+              "label": "No effect"
+            }
+          ],
+          "default": "noeffect",
+          "label": "Image hover"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured diagram"
+    }
+  ]
+}
+{% endschema %}

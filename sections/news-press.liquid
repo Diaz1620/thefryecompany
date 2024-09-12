@@ -1,0 +1,246 @@
+{{ 'section-news-press.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {{ section_selector }} {
+    background-color: {{ section.settings.background_color | default: 'none' }}
+  }
+
+  {% if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+  .news-press__heading {
+    color: {{ section.settings.heading_color }};
+  }
+  {% endif %}
+
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .news-press {
+      padding-top: {{ section.settings.mobile_top_padding }}px;
+      padding-bottom: {{ section.settings.mobile_bottom_padding }}px;
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .news-press {
+      padding-top: {{ section.settings.desktop_top_padding }}px;
+      padding-bottom: {{ section.settings.desktop_bottom_padding }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="news-press page-width {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+  <h2 class="news-press__heading {{ section.settings.heading_size }}">
+    {{ section.settings.heading | escape }}
+  </h2>
+
+  <div class="news-press__content grid grid--1-col grid--3-col-desktop grid--2-col-tablet">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'media' -%}
+          <div class="news-press__media grid__item {% if block.settings.hide_mobile %} small-hide {% endif %}">
+            {%- if block.settings.block_link != blank -%}
+              <a href="{{ block.settings.block_link }}" style="color: {{ block.settings.text_color }};">
+            {%- endif -%}
+                <div class="card card--media">
+                  <div class="card--stretch card-colored">
+                    <img
+                      src="{{ block.settings.image | image_url }}"
+                      alt="{{ block.settings.image.alt }}"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      loading="lazy"
+                      class="news-press__media-image"
+                    />
+                  </div>
+                </div>
+
+                <div class="news-press__media-cta">
+                  <div class="news-press__media-text">
+                    <h3 class="news-press__media-heading" style="color: {{ block.settings.text_color }};">
+                      {{ block.settings.heading | escape }}
+                    </h3>
+
+                    {%- if block.settings.product != blank -%}
+                      {%- if block.settings.cta_link != blank -%}
+                        {% assign blockURL = block.settings.cta_link %}
+                      {%- else -%}
+                        {% assign blockURL = block.settings.product.url %}
+                      {%- endif -%}
+
+                      <a class="news-press__media-product-cta" href="{{ blockURL }}" style="color: {{ block.settings.text_color }};">
+                        {{ block.settings.cta | escape }}
+                      </a>
+                    {%- endif -%}
+                  </div>
+
+                    {%- if block.settings.product != blank -%}
+                      <a class="news-press__media-product" href="{{ block.settings.product.url }}">
+                        <img
+                          src="{{ block.settings.product.featured_image | image_url }}"
+                          alt="{{ block.settings.product.featured_image.alt }}"
+                          width="{{ block.settings.product.featured_image.width }}"
+                          height="{{ block.settings.product.featured_image.height }}"
+                          loading="lazy"
+                          class="news-press__media-product-image"
+                        />
+                      </a>
+                    {%- endif -%}
+                </div>
+            {%- if block.settings.block_link != blank -%}
+              </a>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "News & Press",
+  "tag": "section",
+  "class": "spaced-section spaced-section--full-width section-news-press",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Headline"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "cql-headline-1",
+          "label": "Custom Headline 1"
+        },
+        {
+          "value": "cql-headline-2",
+          "label": "Custom Headline 2"
+        },
+        {
+          "value": "cql-headline-3",
+          "label": "Custom Headline 3"
+        },
+        {
+          "value": "h4",
+          "label": "X-Small"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "X-Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Headline size"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media",
+      "name": "Media block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Featured image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Featured headline"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "url",
+          "id": "block_link",
+          "label": "Block link",
+          "info": "Associated with featured image and headline."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "text",
+          "id": "cta",
+          "label": "CTA",
+          "default": "Shop the ..."
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA link",
+          "info": "If no URL is provided, then the featured product URL will be used."
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_mobile",
+          "label": "Hide block on mobile",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "News & Press"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{%- unless label == blank -%}
+  {%- assign uniqueLabel = label | remove: " " -%}
+  <modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#PopupModal-{{ uniqueLabel }}">
+    <button id="ProductPopup" class="helper-opener label-helper__size link link--text p3-alt" type="button" aria-haspopup="dialog">{{ label }}</button>
+  </modal-opener>
+
+  <modal-dialog id="PopupModal-{{ uniqueLabel }}" class="product-popup-modal helper-modal">
+    <div role="dialog" aria-label="Pop-up text" aria-modal="true" class="product-popup-modal__content" tabindex="-1">
+      <button id="ModalClose-" type="button" class="product-popup-modal__toggle" aria-label="Close">{% render 'icon-close' %}</button>
+      <div class="product-popup-modal__content-info">
+        {{ content }}
+      </div>
+    </div>
+  </modal-dialog>
+{%- endunless -%}

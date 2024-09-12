@@ -1,0 +1,100 @@
+#menu-bar__wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.menu-bar__menu-drawer {
+  position: absolute;
+  top: 75%;
+  left: 0;
+  width: 100%;
+  padding: 0 2.25rem 2.5rem;
+  z-index: 5;
+  box-shadow: rgb(19 19 19 / 10%) 0px 8px 8px 0px;
+}
+
+.menu-bar__menu,
+.menu-bar__container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border-bottom: 0.01rem solid var(--color-border);
+}
+
+.menu-bar__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.menu-bar__summary .icon {
+  display: flex;
+  width: 1.4rem;
+  height: 1.4rem;
+  transition: all ease-in-out 200ms;
+}
+
+details.menu-bar__container[open] .menu-bar__summary .icon {
+  transform: rotate(-90deg);
+}
+
+.menu-bar__container .menu-bar__menu {
+  flex-wrap: wrap;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.menu-bar__container .menu-bar__menu li {
+  width: 100%;
+}
+
+.menu-bar__container .menu-bar__menu .menu-drawer__menu-item {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: unset;
+  text-transform: none;
+  padding: 1rem 0;
+  border-top: 0.01rem solid var(--color-border);
+}
+
+.menu-bar__menu .menu-drawer__menu-item--active,
+.menu-bar__menu .menu-drawer__menu-item:focus,
+.menu-bar__menu .menu-drawer__close-button:focus,
+.menu-bar__menu .menu-drawer__menu-item:hover,
+.menu-bar__menu .menu-drawer__close-button:hover {
+    background: transparent;
+    color: inherit;
+}
+
+@media screen and (min-width: 989px) {
+  .menu-bar__menu,
+  .menu-bar__container {
+    padding: 3rem 2rem;
+    border: none;
+  }
+
+  .menu-bar__menu .menu-drawer__menu-item {
+    padding: 0 2.75rem;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .menu-bar__menu .menu-drawer__menu-item--active,
+  .menu-bar__menu .menu-drawer__menu-item:focus,
+  .menu-bar__menu .menu-drawer__close-button:focus,
+  .menu-bar__menu .menu-drawer__menu-item:hover,
+  .menu-bar__menu .menu-drawer__close-button:hover {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 0.3rem;
+    text-underline-offset: 0.7rem;
+  }
+}
+

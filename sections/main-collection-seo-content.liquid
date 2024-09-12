@@ -1,0 +1,17 @@
+{{ 'section-seo-content.css' | asset_url | stylesheet_tag }}
+
+{% if collection.description != blank %}
+  <div class="seo__section  {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+    <div class="seo__content page-width">
+      {% render 'description', text: collection.description, text_style: block.settings.text_style, text_color: block.settings.text_color, class: "seo__collection-text text-body-small" %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "SEO Content",
+  "class": "seo-content-section spaced-section spaced-section--full-width",
+  "settings": []
+}
+{% endschema %}

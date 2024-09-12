@@ -1,0 +1,170 @@
+{% style %}
+  /* Fonts */
+
+  @font-face {
+    font-family: "TradeGothicBold";
+    src: url({{ "TradeGothic.woff2" | asset_url }}) format('woff2'),
+        url({{ "TradeGothic.woff2" | asset_url }}) format('woff');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+      font-family: 'addington_cf_regular';
+      src: url({{ "addingtoncf-regular-webfont.woff2" | asset_url }}) format('woff2'),
+          url({{ "addingtoncf-regular-webfont.woff" | asset_url }}) format('woff');
+      font-weight: normal;
+      font-style: normal;
+  }
+
+  @font-face {
+      font-family: 'addington_cf_bold';
+      src: url({{ "addingtoncf-bold-webfont.woff2" | asset_url }}) format('woff2'),
+          url({{ "addingtoncf-bold-webfont.woff" | asset_url }}) format('woff');
+      font-weight: bold;
+      font-style: normal;
+  }
+
+
+  :root {
+    --font-body-family: 'sweet-sans-pro', 'Arial', 'sans-serif';
+    --font-body-style: normal;
+    --font-body-weight: normal;
+
+    --font-heading-family: 'TradeGothicBold', 'Arial', 'sans-serif';
+    --font-heading-style: normal;
+    --font-heading-weight: bold;
+
+    --font-body-secondary-regular: 'addington_cf_regular', 'Georgia', 'serif';
+    --font-body-secondary-bold: 'addington_cf_bold', 'Georgia', 'serif';
+
+    --font-body-scale: 1;
+    --font-heading-scale: 1;
+  }
+{% endstyle %}
+
+{% style %}
+  :root {
+    /* Hex values for styleguide use only */
+    --color-styleguide-black: {{ settings.color_frye_black }};
+    --color-styleguide-charcoal: {{ settings.color_frye_charcoal }};
+    --color-styleguide-darkgray: {{ settings.color_frye_darkgray }};
+    --color-styleguide-gray: {{ settings.color_frye_gray }};
+    --color-styleguide-lightgray: {{ settings.color_frye_lightgray }};
+    --color-styleguide-white: {{ settings.color_frye_white }};
+    --color-styleguide-darkbrown: {{ settings.color_frye_darkbrown }};
+    --color-styleguide-brown: {{ settings.color_frye_brown }};
+    --color-styleguide-bright-tan: {{settings.color_frye_bright_tan }};
+    --color-styleguide-badge-tan: {{ settings.color_frye_badge_tan }};
+    --color-styleguide-tan: {{ settings.color_frye_tan }};
+    --color-styleguide-light-tan: {{ settings.color_frye_light_tan }};
+    --color-styleguide-red: {{ settings.color_frye_red }};
+    --color-styleguide-border: {{ settings.color_border_styleguide }};
+    --color-background-accent: {{ settings.background_accent }};
+
+    /* RGB values for general use */
+    --color-base-foreground: {{ settings.color_frye_black.red }}, {{ settings.color_frye_black.green }}, {{ settings.color_frye_black.blue }};
+    --color-base-background: {{ settings.color_frye_white.red }}, {{ settings.color_frye_white.green }}, {{ settings.color_frye_white.blue }};
+    --color-base-border: {{ settings.color_border_styleguide.red }}, {{ settings.color_border_styleguide.green }}, {{ settings.color_border_styleguide.blue }};
+
+    /* Hex values for general use */
+    --color-foreground: rgb(var(--color-base-foreground));
+    --color-background: rgb(var(--color-base-background));
+    --color-border: rgb(var(--color-base-border));
+
+    /* Animations settings */
+    --animation-scroll_appear: {{ settings.scroll_appear}};
+    --animation-scroll_appear_timing: {{ settings.scroll_appear_timing}}s;
+    --image-hover-timing: {{ settings.image_hover_timing}}s;
+
+    /* Other settings */
+    --payment-terms-background-color: {{ settings.colors_background }};
+    --page-width: {{ settings.page_width | divided_by: 10 }}rem;
+    --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+  }
+{% endstyle %}
+
+{% style %}
+  .color-swatches-styleguide .swatch {
+    display: flex;
+    align-items: flex-end;
+    min-height: 30rem;
+    margin: 1rem;
+    padding: 2rem;
+    border: 1px solid var(--color-styleguide-accent-2);
+    border-radius: 10px;
+  }
+
+  .brand-black {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-black);
+  }
+
+  .brand-charcoal {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-charcoal);
+  }
+
+  .brand-darkgray {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-darkgray);
+  }
+
+  .brand-gray {
+    color: var(--color-styleguide-text);
+    background-color: var(--color-styleguide-gray);
+  }
+
+  .brand-lightgray {
+    color: var(--color-styleguide-text);
+    background-color: var(--color-styleguide-lightgray);
+  }
+
+  .brand-darkbrown {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-darkbrown);
+  }
+
+  .brand-brown {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-brown);
+  }
+
+  .brand-white {
+    color: var(--color-styleguide-text);
+    background-color: var(--color-styleguide-white);
+  }
+
+  .brand-bright-tan {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-bright-tan);
+  }
+
+  .brand-badge-tan {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-badge-tan);
+  }
+
+  .brand-tan {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-tan);
+  }
+
+  .brand-light-tan {
+    color: var(--color-styleguide-text);
+    background-color: var(--color-styleguide-light-tan);
+  }
+
+  .brand-red {
+    color: var(--color-styleguide-white);
+    background-color: var(--color-styleguide-red);
+  }
+
+  .inputs-set {
+    display: flex;
+  }
+
+  .inputs-set input {
+    margin-right: 1rem !important;
+  }
+{% endstyle %}

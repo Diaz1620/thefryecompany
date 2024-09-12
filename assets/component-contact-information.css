@@ -1,0 +1,52 @@
+.contact-information {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.contact-information h3 {
+  padding: 2rem 2.5rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.contact-information__container {
+  padding: 4rem 4rem 2.5rem;
+}
+
+.contact-information__container .icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-right: 1rem;
+}
+
+.contact-information__container h4 {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  margin: 0;
+}
+
+.contact-information__container p {
+  margin: 0;
+}
+
+.contact-information__container .contact-information__info {
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.contact-information__container .contact-information__info p {
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+  letter-spacing: normal;
+}
+
+.contact-information__container .contact-information__address p {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+}
+
+@media screen and (min-width: 989px) {
+  .contact-information {
+    width: 37rem;
+  }
+}

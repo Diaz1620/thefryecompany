@@ -1,0 +1,32 @@
+{% comment %}
+    Special page which will redirect to a seller's submissions page.
+    There is code here to ensure customer is logged in. Shopify automatically handles this but code is here
+    to see how app can output this code including this liquid condition via App Proxy.
+{% endcomment %}
+
+{% if customer %}
+
+    <div style="padding:20px;text-align:center;margin:50px 0px;">
+        One moment while we load your {{shop.metafields.recurate.marketplace-name}} dashboard...
+    </div>
+
+    <script>
+        (function() {
+            document.location = "/apps/recurate/sellers/{{customer.id}}/submissions";
+        })();
+    </script>
+{% else %}
+
+    <div style="padding:20px;text-align:center;margin:50px 0px;">
+        One moment...
+    </div>
+    
+    <script>
+
+        (function() {
+            document.cookie = 'recurate_go=1;';
+            document.location = "/account";
+        })();
+    </script>
+
+{% endif %}

@@ -1,0 +1,18 @@
+<!-- recurate CSS -->
+<link rel="stylesheet" href="/apps/recurate/assets/app.css">
+<!-- recurate CSS -->
+<!-- recurate Collection Customer Nav -->
+{% assign collection_name = shop.metafields.recurate['marketplace-name'] %}
+<div class="app-customer-nav-wrapper">
+  <p class='recurate-subheading' style="margin:0"> Sell a product you initially purchased from {{shop.name}}</p>
+  <a
+    href="/a/resale"
+    onkeydown="event.keyCode == '13' && event.target.blur()"
+    aria-label="Sell a product"
+  >
+    <button class="button button--full-width button--primary" onclick="event.target.setAttribute('disabled', true)" style="margin-top:15px">
+      Sell A Product On The Frye Exchange
+    </button>
+  </a>
+</div><p>&nbsp;</p>
+<!-- recurate Collection Customer Nav -->

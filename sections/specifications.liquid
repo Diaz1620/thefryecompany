@@ -1,0 +1,317 @@
+{{ 'section-specifications.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+#specs-{{section.id}} .specs_header.animated.active {
+  animation-duration: {{section.settings.text_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.text_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+
+#specs-{{section.id}} .specs__items.animated.active {
+  animation-duration: {{section.settings.accor_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.accor_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+
+#specs-{{section.id}} .specs_img.animated.active {
+  animation-duration: {{section.settings.image_animation_time}};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{section.settings.image_animation_time}};
+  -webkit-animation-fill-mode: both;
+}
+{% endstyle %}
+
+<div id="specs-{{section.id}}" class="specifications__outer_wrapper {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+  <div class="specifications__inner_wrapper page-width">
+    <div class="specs_general">
+    <div class="specs_header animated {{section.settings.specs_animation}}">
+      <h1 class="{{ section.settings.heading_size }}">{{ section.settings.heading }}</h1>
+      <div class="specifications_desc">{{ section.settings.description }}</div>
+      </div>
+      <img class="specs_img animated {{section.settings.specs_animation}}" src="{{ section.settings.specs_image | image_url }}"
+        alt="{{ section.settings.specs_image.alt}}"
+        loading="lazy"
+        width="{{ section.settings.specs_image.width }}"
+        height="{{ section.settings.specs_image.height }}">
+    </div>
+    <div class="specs__items animated {{section.settings.specs_animation}}">
+      <div class="{{ section.settings.columns }} visible-wrapper">
+        {% for block in section.blocks %}
+          {% if forloop.index <= 6 %}
+            <div class="specs__single-item index-{{forloop.index}}">
+              <div class="spec_type">
+                {{ block.settings.spec_type }}
+              </div>
+              <div class="spec_description">
+                {{ block.settings.spec_description }}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="{{ section.settings.columns }} hidden-wrapper hidden">
+        {% for block in section.blocks %}
+          {% if forloop.index > 6 %}
+            <div class="specs__single-item index-{{forloop.index}}">
+              <div class="spec_type">
+                {{ block.settings.spec_type }}
+              </div>
+              <div class="spec_description">
+                {{ block.settings.spec_description }}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="show_more_wrapper hidden">
+        <span class="show_more">SHOW ALL SPECS  {% render 'icon-caret' %}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let showMoreWrap = document.querySelector(".show_more_wrapper");
+  let showMore = document.querySelector(".show_more");
+  let hiddenWrapper = document.querySelector(".hidden-wrapper");
+  let showMoreArrow = document.querySelector(".show_more .icon-caret");
+
+  if(hiddenWrapper.childElementCount > 0) {
+    showMoreWrap.classList.remove("hidden");
+    showMoreWrap.classList.add("visible");
+  }
+
+  showMore.addEventListener("click", function(){
+      if(hiddenWrapper.classList.contains("hidden")) {
+        hiddenWrapper.classList.remove("hidden");
+        showMoreArrow.classList.add("arrow-up")
+        showMore.childNodes[0].textContent = "SHOW LESS SPECS"
+      } else {
+        hiddenWrapper.classList.add("hidden")
+        showMoreArrow.classList.remove("arrow-up")
+        showMore.childNodes[0].textContent = "SHOW ALL SPECS"
+      }
+  })
+</script>
+
+<style>
+  .specifications__outer_wrapper,
+  .show_more {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .specs_general,
+  .specs__items {
+    color: {{ section.settings.text_color}};
+  }
+
+  .show_more_wrapper::after {
+    border: 1px solid {{ section.settings.text_color }};
+  }
+
+  @media screen and (max-width: 750px) {
+    .specifications__outer_wrapper {
+      padding: {{ section.settings.mobile_top_padding }}px 0 {{ section.settings.mobile_bottom_padding }}px;
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    .specifications__outer_wrapper {
+      padding: {{ section.settings.desktop_top_padding }}px 0 {{ section.settings.desktop_bottom_padding }}px;
+    }
+  }
+
+</style>
+
+{% schema %}
+{
+  "name": "Specifications",
+  "tag": "section",
+  "class": "spaced-section spaced-section--full-width",
+  "settings": [
+   {
+     "type": "header",
+     "content": "Colors",
+     "info": "Select colors your background and text"
+   },
+   {
+     "type": "color",
+     "id": "background_color",
+     "label": "Background color"
+   },
+   {
+    "type": "color",
+    "id": "text_color",
+    "label": "Text color"
+  },
+  {
+    "type": "text",
+    "id": "heading",
+    "label": "Heading"
+  },
+  {
+    "type": "select",
+    "id": "heading_size",
+    "options": [
+      {
+        "value": "cql-headline-1",
+        "label": "Custom Headline 1"
+      },
+      {
+        "value": "cql-headline-2",
+        "label": "Custom Headline 2"
+      },
+      {
+        "value": "cql-headline-3",
+        "label": "Custom Headline 3"
+      },
+      {
+        "value": "h4",
+        "label": "X-Small"
+      },
+      {
+        "value": "h3",
+        "label": "Small"
+      },
+      {
+        "value": "h2",
+        "label": "Medium"
+      },
+      {
+        "value": "h1",
+        "label": "Large"
+      },
+      {
+        "value": "h0",
+        "label": "X-Large"
+      }
+    ],
+    "default": "h1",
+    "label": "Headline size"
+  },
+  {
+    "type": "richtext",
+    "id": "description",
+    "label": "Description"
+  },
+  {
+    "type": "select",
+    "id": "specs_animation",
+    "options":[
+      {
+        "value": "fadeIn",
+        "label": "Fade In"
+      },
+      {
+        "value": "fadeInUp",
+        "label": "Fade In Up"
+      },
+      {
+        "value": "NoEffect",
+        "label": "No Effect"
+      }
+    ],
+    "default": "NoEffect",
+    "label": "Select Animation"
+  },
+  {
+    "type": "text",
+    "id": "text_animation_time",
+    "default": "1s",
+    "label": "Headline Animation Time",
+    "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+  },
+  {
+    "type": "image_picker",
+    "id": "specs_image",
+    "label": "Specifications image"
+  },
+  {
+    "type": "text",
+    "id": "image_animation_time",
+    "default": "2s",
+    "label": "Image Animation Time",
+    "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+  },
+  {
+    "type": "select",
+    "id": "columns",
+    "label": "Specifications style",
+    "options": [
+      {
+        "value": "one-column",
+        "label": "One column"
+      },
+      {
+        "value": "two-column",
+        "label": "Two column"
+      }
+    ]
+  },
+  {
+  "type": "text",
+  "id": "accor_animation_time",
+  "default": "3s",
+  "label": "Specs Animation Time",
+  "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+  },
+  {
+    "type": "header",
+    "content": "Section padding"
+  },
+  {
+    "type": "number",
+    "id": "desktop_top_padding",
+    "label": "Desktop top padding (px)",
+    "default": 60
+  },
+  {
+    "type": "number",
+    "id": "desktop_bottom_padding",
+    "label": "Desktop bottom padding (px)",
+    "default": 60
+  },
+  {
+    "type": "number",
+    "id": "mobile_top_padding",
+    "label": "Mobile top padding (px)",
+    "default": 45
+  },
+  {
+    "type": "number",
+    "id": "mobile_bottom_padding",
+    "label": "Mobile bottom padding (px)",
+    "default": 45
+  }
+],
+  "blocks": [
+    {
+      "type": "specification",
+      "name": "Spec",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "spec_type",
+          "label": "Spec type"
+        },
+        {
+          "type": "richtext",
+          "id": "spec_description",
+          "label": "Spec description",
+          "info": "Limit text to 2 lines."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Specifications"
+    }
+  ]
+}
+{% endschema %}

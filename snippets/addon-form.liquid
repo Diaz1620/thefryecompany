@@ -1,0 +1,18 @@
+<a class="addon__product-url" href="{{addonProduct.url}}">
+  <div class="addon__product">
+    <div class="addon__product-image">
+      <img class="addon__img"
+          src="{{ addonProduct.featured_image | image_url }}" 
+          alt="{{ addonProduct.featured_image.alt }}"
+          width="{{ addonProduct.featured_image.width }}"
+          height="{{ addonProduct.featured_image.height }}">
+    </div>
+    <div class="addon__product_wrap">
+      <div class="addon__product-info">
+        <div class="addon__title">
+          {{ addonProduct.title }}
+        </div>
+      </div>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,54 @@
+<script id="collection-filters" type="application/json">
+  {
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'color-family' -%}
+        "{{ block.settings.text }}": {
+          "swatchImage": "{{ block.settings.swatch_image }}",
+          "swatchFile": "{{ block.settings.swatch_image | img_url: 80 }}",
+          "hexValue": "{{ block.settings.hex_value }}"
+        }{% unless forloop.index == section.blocks.size %},{% endunless %}
+      {%- endcase -%}
+    {%- endfor -%}
+  }
+</script>
+
+<script>
+  const color_filters = document.querySelector('#collection-filters')
+
+  window.Resources.color_filters = color_filters
+</script>
+
+
+{% schema %}
+{
+"name": "Filter swatches",
+"class": "hidden",
+"settings": [],
+"blocks": [
+{
+"type": "color-family",
+"name": "Color family",
+"settings": [
+{
+"type": "text",
+"id": "text",
+"label": "Filter label"
+},
+{
+"type": "image_picker",
+"id": "swatch_image",
+"label": "Swatch image",
+"info": "80x80 PNG"
+},
+{
+"type": "color",
+"id": "hex_value",
+"label": "Hex value",
+"info": "Not required if swatch image provided."
+}
+]
+}
+]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{% comment %}
+    Renders promo items on the right side of the megamenu drop-down.
+
+    Accepts:
+    - menu_item: {Object} Link List object
+    - blocks: {Object} Blocks defined for mega menu contents
+
+    Usage:
+    {% render 'menu-list-promos', menu_item: link_item, blocks: blocks %}
+{% endcomment %}
+
+{% capture promo_content %}
+  {%- for block in blocks -%}
+    {%- if block.type == 'megamenu_link_lists' -%}
+        {%- assign blockName = block.settings.parent_menu_item_name | escape -%}
+
+        {%- if blockName != blank and blockName == menu_item.title -%}
+          {% if block.settings.promo_override != blank %}
+            {{ block.settings.promo_override }}
+          {% else %}
+            {% for i in (1..4) %}
+              {% assign promo_link_key = "promo_link__" | append: i %}
+              {% assign promo_image_key = "promo_image__" | append: i %}
+              {% assign promo_label_key = "promo_label__" | append: i %}
+
+              {% unless block.settings[promo_link_key] == blank and block.settings[promo_image_key] == blank and block.settings[promo_label_key] == blank %}
+              <a class="promo__link" href="{{ block.settings[promo_link_key] }}">
+                {%- if block.settings[promo_image_key] != blank -%}
+                  {% assign img = block.settings[promo_image_key] %}
+                  {% assign imgWidth = img.width | at_most: 240 %}
+
+                  <img class="promo__image"
+                    src="{{ img | image_url: width: imgWidth }}"
+                    width="{{ imgWidth }}"
+                    height="{{ imgWidth | divided_by: img.aspect_ratio | ceil }}"
+                    loading="lazy"
+                    alt="{{ block.settings[promo_image_key].alt }}"
+                    class="img--promo-image"
+                  />
+                {%- endif -%}
+                {% if block.settings[promo_label_key] %}
+                  <span class="promo__label">{{ block.settings[promo_label_key] }}</span>
+                {% endif %}
+              </a>
+              {% endunless %}
+            {% endfor %}
+          {% endif %}
+        {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{% endcapture %}
+
+{% if promo_content != blank %}
+  <div class="header__menu-promos">
+    {{ promo_content }}
+  </div>
+{% endif %}

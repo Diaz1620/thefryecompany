@@ -1,0 +1,54 @@
+<script id="collection-swatches-1" type="application/json">
+  {
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'swatch' -%}
+        "{{ block.settings.text }}": {
+          "swatchImage": "{{ block.settings.swatch_image }}",
+          "swatchFile": "{{ block.settings.swatch_image | img_url: 80 }}",
+          "hexValue": "{{ block.settings.hex_value }}"
+        }{% unless forloop.last %},{% endunless %}
+      {%- endcase -%}
+    {%- endfor -%}
+  }
+</script>
+
+<script>
+  const swatches1 = document.querySelector('#collection-swatches-1')
+
+      window.Resources.swatches_1 = swatches1
+</script>
+
+
+{% schema %}
+{
+  "name": "Product Swatches A-K",
+  "class": "hidden",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "swatch",
+      "name": "Color swatch",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Swatch label"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_image",
+          "label": "Swatch image",
+          "info": "80x80 PNG"
+        },
+        {
+          "type": "color",
+          "id": "hex_value",
+          "label": "Hex value",
+          "info": "Not required if swatch image provided."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

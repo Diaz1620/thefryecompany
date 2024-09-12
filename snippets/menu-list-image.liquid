@@ -1,0 +1,42 @@
+{% comment %}
+    Renders a menu list image with a submenu navigation item.
+
+    Accepts:
+    - parent_menu_item: {Object} List item,
+    - menu_item: {Object} List item
+    - blocks: {Object} Blocks defined for megamenu contents
+
+    Usage:
+    {% render 'menu-list-image', parent_menu_item: link_item, menu_item: link_item, blocks: blocks %}
+{% endcomment %}
+
+{%- for block in blocks -%}
+  {%- if block.type == 'megamenu_image_blocks' -%}
+    {%- if parent_menu_item.title != blank and parent_menu_item.title == block.settings.parent_menu_item_name -%}
+
+      {%- for i in (1..4) -%}
+        {%- assign blockLabel = "block_label__" | append: i -%}
+        {%- assign blockImage = "block_image__" | append: i -%}
+        {%- assign blockName = block.settings[blockLabel] | escape -%}
+        {%- assign menuItem = menu_item.title | escape -%}
+
+        {%- if blockName != blank and blockName == menuItem -%}
+          {%- if block.settings[blockImage] != blank -%}
+            {% assign img = block.settings[blockImage] %}
+            {% assign imgWidth = img.width | at_most: 260 %}
+
+            <img
+              src="{{ img | image_url: width: imgWidth }}"
+              width="{{ imgWidth }}"
+              height="{{ imgWidth | divided_by: img.aspect_ratio | ceil }}"
+              loading="lazy"
+              alt="{{ img.alt }}"
+              class="media"
+            >
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}

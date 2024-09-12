@@ -1,0 +1,181 @@
+{%- for block in blocks -%}
+    {%- case block.type -%}
+      {%- when 'image' -%}
+        {% render 'image', image: block.settings.image, image_max_width: block.settings.image_max_width, class: 'banner__image' %}
+  
+      {%- when 'eyebrow' -%}
+        {% capture mobileColor %}
+          {% if block.settings.eyebrow_color_mobile != 'rgba(0,0,0,0)' %}
+            {{ block.settings.eyebrow_color_mobile }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% capture desktopColor %}
+          {% if block.settings.eyebrow_color_desktop != 'rgba(0,0,0,0)' %}
+            {{ block.settings.eyebrow_color_desktop }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% render 'eyebrow', text: block.settings.eyebrow, text_style: block.settings.eyebrow_style, text_color: mobileColor, class: "banner__eyebrow medium-hide large-up-hide" %}
+  
+        {% render 'eyebrow', text: block.settings.eyebrow, text_style: block.settings.eyebrow_style, text_color: desktopColor, class: "banner__eyebrow small-hide" %}
+  
+      {%- when 'heading' -%}
+        {% capture mobileColor %}
+          {% if block.settings.heading_color_mobile != 'rgba(0,0,0,0)' %}
+            {{ block.settings.heading_color_mobile }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% capture desktopColor %}
+          {% if block.settings.heading_color_desktop != 'rgba(0,0,0,0)' %}
+            {{ block.settings.heading_color_desktop }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% render 'headline', text: block.settings.heading, text_style: block.settings.heading_size, text_color: mobileColor, class: "banner__heading medium-hide large-up-hide"%}
+  
+        {% render 'headline', text: block.settings.heading, text_style: block.settings.heading_size, text_color: desktopColor, class: "banner__heading small-hide"%}
+  
+      {%- when 'text' -%}
+        {% capture mobileColor %}
+          {% if block.settings.text_color_mobile != 'rgba(0,0,0,0)' %}
+            {{ block.settings.text_color_mobile }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% capture desktopColor %}
+          {% if block.settings.text_color_desktop != 'rgba(0,0,0,0)' %}
+            {{ block.settings.text_color_desktop }}
+          {% endif %}
+        {% endcapture %}
+  
+        {% if template contains 'collection' and block.settings.text == blank %}
+          {% render 'description', text: collection.description, text_style: block.settings.text_style, text_color: mobileColor, class: "banner__text medium-hide large-up-hide" %}
+        {% else %}
+          {% render 'description', text: block.settings.text, text_style: block.settings.text_style, text_color: mobileColor, class: "banner__text medium-hide large-up-hide"%}
+        {% endif %}
+  
+        {% if template contains 'collection' and block.settings.text == blank %}
+          {% render 'description', text: collection.description, text_style: block.settings.text_style, text_color: desktopColor, class: "banner__text small-hide"%}
+        {% else %}
+          {% render 'description', text: block.settings.text, text_style: block.settings.text_style, text_color: desktopColor, class: "banner__text small-hide"%}
+        {% endif %}
+  
+      {%- when 'button' -%}
+        <div class="banner__button-wrapper {% if block.settings.show_side_by_side %} side-by-side{%- endif -%} {% unless block.settings.animation contains 'No' %} animated{%- endunless -%} {{ block.settings.animation }}" {{ block.shopify_attributes }} data-block-id="{{ block.id }}" id="block-section-{{ block.id }}">
+          {%- if block.settings.button_label_1 != blank -%}
+            {% assign showArrow1 = '' %}
+            {% if block.settings.button_style_1 contains 'link-1' %}
+              {% assign showArrow1 = 'right' %}
+            {% endif %}
+   
+            {% render 'button',
+              label: block.settings.button_label_1,
+              link: block.settings.button_link_1,
+              variation: block.settings.button_style_mobile_1,
+              arrow: showArrow1,
+              class: "banner__button medium-hide large-up-hide"
+            %}
+  
+            {% render 'button',
+              label: block.settings.button_label_1,
+              link: block.settings.button_link_1,
+              variation: block.settings.button_style_desktop_1,
+              arrow: showArrow1,
+              class: "banner__button small-hide"
+            %}
+          {%- endif -%}
+  
+          {%- if block.settings.button_label_2 != blank -%}
+            {% if block.settings.show_separator %}
+              <span class="banner__button-separator">|</span>
+            {% endif %}
+  
+            {% assign showArrow2 = '' %}
+            {% if block.settings.button_style_2 contains 'link-1' %}
+              {% assign showArrow2 = 'right' %}
+            {% endif %}
+  
+            {% render 'button',
+              label: block.settings.button_label_2,
+              link: block.settings.button_link_2,
+              variation: block.settings.button_style_mobile_2,
+              arrow: showArrow2,
+              class: "banner__button medium-hide large-up-hide"
+            %}
+  
+            {% render 'button',
+              label: block.settings.button_label_2,
+              link: block.settings.button_link_2,
+              variation: block.settings.button_style_desktop_2,
+              arrow: showArrow2,
+              class: "banner__button small-hide"
+            %}
+          {%- endif -%}
+  
+          {% comment %} Recurate Button {% endcomment %}
+          {%- if block.settings.button_label_3 != blank -%}
+          {% if customer %}
+            {% capture customer_url %}/apps/recurate/sellers/{{ customer.id }}/submissions{% endcapture %}
+
+            {% render 'button',
+            label: block.settings.button_label_3,
+            link: customer_url,
+            variation: block.settings.button_style_mobile_3,
+            arrow: showArrow2,
+            class: "banner__button medium-hide large-up-hide"
+          %}
+  
+          {% render 'button',
+            label: block.settings.button_label_3,
+            link: customer_url,
+            variation: block.settings.button_style_desktop_3,
+            arrow: showArrow2,
+            class: "banner__button small-hide"
+          %}
+          {% else %}
+          {% render 'button',
+          label: block.settings.button_label_3,
+          link: "/account/login",
+          variation: block.settings.button_style_mobile_3,
+          arrow: showArrow2,
+          class: "banner__button medium-hide large-up-hide"
+        %}
+  
+        {% render 'button',
+          label: block.settings.button_label_3,
+          link: "/account/login",
+          variation: block.settings.button_style_desktop_3,
+          arrow: showArrow2,
+          class: "banner__button small-hide"
+        %}
+        {% endif %}
+  
+          {%- endif -%}
+          </div>
+  
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          @media screen and (min-width: 750px) {
+            {{ block_selector }}.banner__button-wrapper {
+              {% if block.settings.show_side_by_side %}
+                display: inline-flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 2rem;
+              {% endif %}
+            }
+  
+            {{ block_selector }}.banner__button-wrapper .banner__button-separator {
+            {% if block.settings.show_side_by_side %}
+              color: {{ block.settings.separator_color }};
+            {% endif %}
+            }
+          }   
+          {% endstyle %}
+    {%- endcase -%}
+  {%- endfor -%}
+  

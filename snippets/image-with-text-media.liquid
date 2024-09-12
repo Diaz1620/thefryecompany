@@ -1,0 +1,31 @@
+<div class="image-with-text__media-item
+  image-with-text__media-item--{{ section.settings.desktop_image_width }}
+  image-with-text__media-item--{{ section.settings.desktop_content_position }}
+  image-with-text__media-item--mobile-{{ section.settings.mobile_image_width }}
+  grid__item">
+  <div class="{% if image_hover == 'easein' %} hoverAnimation {% endif %} image-with-text__media image-with-text__media--{{ section.settings.height }} {% if section.settings.image != blank %}media{% else %}image-with-text__media--placeholder placeholder{% endif %}"
+  {% if section.settings.height == 'adapt' and
+        section.settings.image != blank %} style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"{% endif %}
+  >
+  {%- if section.settings.image != blank and section.settings.image_mobile != blank -%}
+    {% render 'image',
+      image: section.settings.image,
+      image_max_width: 1500,
+      class: "image-with-text__image small-hide"
+    %}
+
+    {% render 'image',
+      image: section.settings.image_mobile,
+      image_max_width: 900,
+      class: "image-with-text__image medium-hide large-up-hide"
+    %}
+  {%- elsif section.settings.image != blank -%}
+    {% render 'image',
+      image: section.settings.image,
+      image_max_width: 1500
+    %}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+  </div>
+</div>

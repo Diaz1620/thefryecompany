@@ -1,0 +1,111 @@
+{% comment %}
+    Renders an anchor or button tag.
+
+    Accepts:
+    - (Optional) label: {text} Display label
+    - (Optional) variation: {'primary'|'secondary'|'tertiary'|'quaternary'|'link-1'|'link-2'} Button variation. Default: 'primary'
+    - (Optional) size: {'xsmall'|'small'|'medium'|'large'} Button size. Default: 'small'
+    - (Optional) shape: {'default'|'round'} Button shape. Default: 'default'
+    - (Optional) icon: {text} Snippet name representing desired icon.
+    - (Optional) title: {text} Help text - important to include if only icon supplied.
+    - (Optional) link: {url} Destination link. If omitted, will render a button tag.
+    - (Optional) openLinkInNewtab: {boolean} If true, sets a _blank target on the anchor tag.
+    - (Optional) class: {string} Class attribute for the anchor or button tag.
+    - (Optional) disabled: {boolean} Flag to indicate the button is disabled.
+    - (Optional) type: {'button' | 'submit' | 'reset'} Button role added if no link supplied. Default: 'button'
+    - (Optional) name: {string} Name attribute for button
+    - (Optional) onclick: {text} On click handler.
+    - (Optional) arrow: {'left' | 'right'} Include arrow before or after button label. No default.
+    - (Optional) block: {shopify block} Allows for shopify block data to be set on output.
+
+    Usage:
+        {% render 'button',
+            label: 'Large',
+            variation: 'quaternary',
+            size: 'large',
+            shape: 'round',
+            class: 'hover',
+            arrow: 'right'
+        %}
+{% endcomment %}
+
+{%- unless label == blank and icon == blank -%}
+
+  {% if class != blank %}
+    {% assign openChatClass = label | downcase %}
+    {% if openChatClass == 'live chat' %}
+      {% assign class = class | append: ' open_chat' %}
+    {% endif %}
+      {% assign class = class | append: ' button' %}
+  {% else %}
+      {% assign class = 'button' %}
+  {% endif %}
+
+  {% assign variation = variation | default: 'primary' %}
+  {% assign size = size | default: 'small' %}
+  {% assign shape = shape | default: 'default' %}
+
+  {% case variation %}
+    {% when 'primary' %}{% assign class = class | append: ' button--primary' %}
+    {% when 'primary-dark' %}{% assign class = class | append: ' button--primary-dark' %}
+    {% when 'secondary' %}{% assign class = class | append: ' button--secondary' %}
+    {% when 'secondary-dark' %}{% assign class = class | append: ' button--secondary-dark' %}
+    {% when 'link-1' %}{% assign class = class | append: ' button--link-1' %}
+    {% when 'link-1-dark' %}{% assign class = class | append: ' button--link-1-dark' %}
+    {% when 'link-2' %}{% assign class = class | append: ' button--link-2' %}
+    {% when 'link-2-dark' %}{% assign class = class | append: ' button--link-2-dark' %}
+  {% endcase %}
+
+  {% case size %}
+      {% when 'xsmall' %}{% assign class = class | append: ' button--xsmall' %}
+      {% when 'small' %}{% assign class = class | append: ' button--small' %}
+      {% when 'medium' %}{% assign class = class | append: ' button--medium' %}
+      {% when 'large' %}{% assign class = class | append: ' button--large' %}
+  {% endcase %}
+
+  {% case shape %}
+      {% when 'round' %}
+          {% unless variation == 'link-1' or variation == 'link-2'%}
+              {% assign class = class | append: ' button--round' %}
+          {% endunless %}
+  {% endcase %}
+
+  {% case arrow %}
+      {% when 'left' %}
+          {% assign class = class | append: ' button--arrow-left' %}
+      {% when 'right' %}
+          {% assign class = class | append: ' button--arrow-right' %}
+  {% endcase %}
+
+  {% assign type = type | default: 'button' %}
+
+  {% comment %} Render anchor tag if link present, otherwise button tag {% endcomment %}
+  {%- if link != blank -%}
+    {{ arrow }}
+  <a
+      href="{{ link }}"
+      {% if openLinkInNewtab %}target="_blank"{% endif %}
+  {%- else -%}
+  <button
+      type="{{ type }}"
+      {% if name != blank %} name="{{ name }}"{% endif %}
+      {% if disabled %} disabled{% endif %}
+  {%- endif -%}
+      class="{{ class }}"
+      {% if title != blank %} title="{{ title }}"{% endif %}
+      {% if style != blank %} style="{{ style }}"{% endif %}
+      {% if onclick != blank %} onclick="{{ onclick }}"{% endif %}
+      {% if block != blank %} {{ block.shopify_attributes }} data-block-id="{{ block.id }}"{% endif %}
+  >{%- if arrow == 'left' -%}
+      {% render 'icon-button-arrow', facing: 'left' %}
+  {%- endif -%}{{
+      label
+  }}{%- if arrow == 'right' -%}
+      {% render 'icon-button-arrow', facing: 'right' %}
+  {%- endif -%}
+  {%- if link != blank -%}
+  </a>
+  {%- else -%}
+  </button>
+  {%- endif -%}
+{%- endunless -%}

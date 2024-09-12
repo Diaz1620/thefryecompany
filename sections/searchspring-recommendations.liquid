@@ -1,0 +1,219 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+<div class="recommendations page-width {% if settings.scroll_appear == 'fadein' %} fadeIn {% endif %}" style="color: {{ section.settings.text_color }};">
+  <h2 class="recommendations__heading {{ section.settings.heading_size }}" style="text-align: {{ section.settings.content_alignment }};">{{ section.settings.heading | escape }}</h2>
+
+  {% if section.blocks.size > 1 %}
+    <div class="recommendations__collection-selectors">
+      {% for block in section.blocks %}
+
+        {% assign tab_nav_label = block.settings.tab_title %}
+
+        <a class="recommendations__collection-selector{% if forloop.first %} active{% endif %}" data-block-id="{{ block.id }}">
+          <span class="brighton-p2">{{ tab_nav_label }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="recommendations__collection-carousels {% if section.blocks.size > 1 %}carousel{% endif %}">
+    {% for block in section.blocks %}
+      <div class="recommendations__collection{% if forloop.first %} active{% endif %}" data-block-id="{{ block.id }}">
+        <div class="recommendations__collection-inner">
+          <script type="searchspring/personalized-recommendations" profile="{{ block.settings.profile_id }}">
+            options = {
+              limit: {{ block.settings.max_recommendations }}
+            };
+          </script>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script type="text/javascript">
+  let sectionSelectorSSRecs = '#shopify-section-{{ section.id }}';
+  let collectionSelectorsSSRecs = document.querySelectorAll(`${sectionSelectorSSRecs} .recommendations__collection-selector`);
+
+  for (let collectionSelector of collectionSelectorsSSRecs) {
+    let blockId = collectionSelector.dataset.blockId;
+
+    let collectionCarousel = document.querySelector(`${sectionSelectorSSRecs} .recommendations__collection[data-block-id="${blockId}"]`);
+    let otherCarousels = document.querySelectorAll(`${sectionSelectorSSRecs} .recommendations__collection:not([data-block-id="${blockId}"])`);
+
+    collectionSelector.addEventListener('click', () => {
+
+      for (let otherCarousel of otherCarousels) {
+        otherCarousel.classList.remove('active');
+      }
+
+      for (let collectionSelector of collectionSelectorsSSRecs) {
+        collectionSelector.classList.remove('active');
+      }
+
+      collectionSelector.classList.add('active');
+      collectionCarousel.classList.add('active');
+
+      window.dispatchEvent(new Event('resize'));
+    })
+  }
+</script>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+
+  {{ section_selector }} {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .recommendations {
+      {%- if section.settings.mobile_top_padding -%}
+        padding-top: {{ section.settings.mobile_top_padding }}px;
+      {%- endif -%}
+      {%- if section.settings.mobile_bottom_padding -%}
+        padding-bottom: {{ section.settings.mobile_bottom_padding }}px;
+      {%- endif -%}
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .recommendations {
+      {%- if section.settings.desktop_top_padding -%}
+        padding-top: {{ section.settings.desktop_top_padding }}px;
+      {%- endif -%}
+      {%- if section.settings.desktop_bottom_padding -%}
+        padding-bottom: {{ section.settings.desktop_bottom_padding }}px;
+      {%- endif -%}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+  {
+    "name": "Recommendations",
+    "tag": "section",
+    "class": "searchspring-reviews",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headline settings"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "You may also like",
+        "label": "Text"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+          {
+            "value": "brighton-h1",
+            "label": "X-Large"
+          },
+          {
+            "value": "brighton-h2",
+            "label": "Large"
+          },
+          {
+            "value": "brighton-h3",
+            "label": "Medium"
+          },
+          {
+            "value": "brighton-h4",
+            "label": "Small"
+          }, {
+            "value": "brighton-h5",
+            "label": "X-Small"
+          }
+        ],
+        "default": "brighton-h2",
+        "label": "Headline size"
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center",
+        "label": "Content alignment"
+      }, {
+        "type": "header",
+        "content": "Section colors"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "number",
+        "id": "desktop_top_padding",
+        "label": "Desktop top padding (px)",
+        "default": 60
+      }, {
+        "type": "number",
+        "id": "desktop_bottom_padding",
+        "label": "Desktop bottom padding (px)",
+        "default": 60
+      }, {
+        "type": "number",
+        "id": "mobile_top_padding",
+        "label": "Mobile top padding (px)",
+        "default": 45
+      }, {
+        "type": "number",
+        "id": "mobile_bottom_padding",
+        "label": "Mobile bottom padding (px)",
+        "default": 45
+      }
+    ],
+    "blocks": [
+      {
+        "type": "recommendations",
+        "name": "Recommendations",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "text",
+            "id": "profile_id",
+            "label": "Recommendations profile ID",
+            "info": "Find the right code in the Searchspring merchant admin > Product Recommendations tab"
+          }, {
+            "type": "number",
+            "id": "max_recommendations",
+            "label": "Maximum products to display",
+            "default": 8
+          }, {
+            "type": "text",
+            "id": "tab_title",
+            "label": "Tab title",
+            "info": "Only required if using more than 1 block in a section"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Searchspring recommendations"
+      }
+    ]
+  }
+{% endschema %}

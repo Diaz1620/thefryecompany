@@ -1,0 +1,74 @@
+{% assign base_url = request.host | prepend: 'https://' | append: '/' %}
+{% if template contains 'collection' %}
+    {% assign name = collection.title %}
+    {% assign url = collection.handle | prepend: 'collections/' | prepend: base_url %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement":[
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item":{
+                    "@id": "{{ url }}",
+                    "name": "{{ name }}"
+                }
+            }
+        ]
+    }
+    </script>
+{% endif %}
+
+{% if template contains 'product' %}
+    {% assign product_collection = product.collections | last %}
+    {% assign name = product_collection.title %}
+    {% assign url = product_collection.handle | prepend: 'collections/' | prepend: base_url %}
+    {% assign product_url = product.handle | prepend: 'products/' | prepend: base_url  %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement":[
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item":{
+                    "@id": "{{ url }}",
+                    "name": "{{ name }}"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item":{
+                    "@id": "{{ product_url }}",
+                    "name": "{{ product.title }}"
+                }
+            }
+        ]
+    }
+    </script>
+{% endif %}
+
+{% if template contains 'page' %}
+    {% assign name = page.title %}
+    {% assign url = page.handle | prepend: 'pages/' | prepend: base_url %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement":[
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item":{
+                    "@id": "{{ url }}",
+                    "name": "{{ name }}"
+                }
+            }
+        ]
+    }
+    </script>
+{% endif %}
+

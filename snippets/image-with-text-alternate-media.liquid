@@ -1,0 +1,53 @@
+{%- if section.settings.image != blank and section.settings.image_mobile != blank -%}
+  <div class="image-with-text-alternate__media medium-hide small-hide {{ section.settings.image_size }} {% if section.settings.image != blank %}media {% else %}image-with-text-alternate__media--placeholder placeholder{% endif %}"
+    {% if section.settings.image != blank%} style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"{% endif %}
+  >
+    {%- if section.settings.image != blank and section.settings.image_mobile != blank -%}
+      {% render 'image',
+        image: section.settings.image,
+        image_max_width: 1500,
+        class: "image-with-text-alternate__image"
+      %}
+    {%- elsif section.settings.image != blank -%}
+      {% render 'image',
+        image: section.settings.image,
+        image_max_width: 1500
+      %}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  <div class="image-with-text-alternate__media large-up-hide {{ section.settings.image_size }} {% if section.settings.image_mobile != blank %}media {% else %}image-with-text-alternate__media--placeholder placeholder{% endif %}"
+    {% if section.settings.image_mobile != blank%} style="padding-bottom: {{ 1 | divided_by: section.settings.image_mobile.aspect_ratio | times: 100 }}%;" {% endif %}
+  >
+    {%- if section.settings.image != blank and section.settings.image_mobile != blank -%}
+      {% render 'image',
+        image: section.settings.image_mobile,
+        image_max_width: 900,
+        class: "image-with-text-alternate__image"
+      %}
+    {%- elsif section.settings.image != blank -%}
+      {% render 'image',
+        image: section.settings.image,
+        image_max_width: 1500
+      %}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+{%- else -%}
+  <div class="image-with-text-alternate__media {{ section.settings.image_size }} {% if section.settings.image != blank %}media {% else %}image-with-text-alternate__media--placeholder placeholder{% endif %}"
+    {% if section.settings.image != blank%} style="padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;"{% endif %}
+  >
+    {%- if section.settings.image != blank -%}
+      {% render 'image',
+        image: section.settings.image,
+        image_max_width: 1500,
+        class: "image-with-text-alternate__image"
+      %}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+{%- endif -%}

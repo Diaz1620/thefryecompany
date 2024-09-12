@@ -1,0 +1,294 @@
+{{ 'section-spotlight.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {{ section_selector }} {
+    background-color: {{ section.settings.background_color | default: 'none' }}
+  }
+
+  {% if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+  .spotlight__heading {
+    color: {{ section.settings.heading_color }};
+  }
+  {% endif %}
+
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .spotlight {
+      padding-top: {{ section.settings.mobile_top_padding }}px;
+      padding-bottom: {{ section.settings.mobile_bottom_padding }}px;
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .spotlight {
+      padding-top: {{ section.settings.desktop_top_padding }}px;
+      padding-bottom: {{ section.settings.desktop_bottom_padding }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="spotlight page-width {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}">
+  <h2 class="spotlight__heading {{ section.settings.heading_size }}">
+    {{ section.settings.heading | escape }}
+  </h2>
+
+  <div class="spotlight__content">
+    {%- for block in section.blocks -%}
+      {%- comment %}<locksmith:ed0e>{% endcomment -%}
+        {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.collection, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+      {%- comment %}</locksmith:ed0e>{% endcomment -%}
+      {%- case block.type -%}
+        {%- when 'media' -%}
+          <div class="spotlight__media {% if block.settings.reverse_order %} reverse {% endif %}">
+            <h3 class="spotlight__media-heading large-up-hide {{ block.settings.heading_size }}" style="color: {{ block.settings.text_color }};">
+              {{ block.settings.heading | escape }}
+            </h3>
+
+            <img
+              src="{{ block.settings.image | image_url }}"
+              alt="{{ block.settings.image.alt }}"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+              loading="lazy"
+              class="spotlight__media-image"
+            />
+
+            <div class="spotlight__media-cta">
+              <h3 class="spotlight__media-heading small-hide medium-hide {{ block.settings.heading_size }}" style="color: {{ block.settings.text_color }};">
+                {{ block.settings.heading | escape }}
+              </h3>
+
+              <div class="spotlight__media-product-info">
+                {%- if block.settings.product != blank -%}
+                  <a class="spotlight__media-product" href="{{ block.settings.product.url }}">
+                    <div class="spotlight__media-product-image-wrapper">
+                      <img
+                        src="{{ block.settings.product.featured_image | image_url }}"
+                        alt="{{ block.settings.product.featured_image.alt }}"
+                        width="{{ block.settings.product.featured_image.width }}"
+                        height="{{ block.settings.product.featured_image.height }}"
+                        loading="lazy"
+                        class="spotlight__media-product-image"
+                      />
+                    </div>
+
+                    <h4 class="spotlight__media-product-title product__title" style="color: {{ block.settings.text_color }};" {{ block.shopify_attributes }}>
+                      {{ block.settings.product.title | escape }}
+                    </h4>
+
+                    <div class="spotlight__media-product-price no-js-hidden product__price-container" id="price-{{ block.id }}" style="color: {{ block.settings.text_color }};" {{ block.shopify_attributes }}>
+                      {% render 'price', product: block.settings.product, price_class: '' %}
+                    </div>
+                  </a>
+                {%- endif -%}
+
+                {%- if block.settings.collection != blank -%}
+                  <a class="spotlight__media-collection" href="{{ block.settings.collection.url }}" style="color: {{ block.settings.text_color }};">
+                    <div class="spotlight__media-collection-image-wrapper">
+                      <img
+                        src="{{ block.settings.collection.featured_image | image_url }}"
+                        alt="{{ block.settings.collection.featured_image.alt }}"
+                        width="{{ block.settings.collection.featured_image.width }}"
+                        height="{{ block.settings.collection.featured_image.height }}"
+                        loading="lazy"
+                        class="spotlight__media-collection-image"
+                      />
+                    </div>
+
+                    <h4 class="spotlight__media-collection-title" style="color: {{ block.settings.text_color }};" {{ block.shopify_attributes }}>
+                      {{ block.settings.cta | escape }}
+                    </h4>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spotlight",
+  "tag": "section",
+  "class": "spaced-section spaced-section--full-width section-spotlight",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Headline"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "cql-headline-1",
+          "label": "Custom Headline 1"
+        },
+        {
+          "value": "cql-headline-2",
+          "label": "Custom Headline 2"
+        },
+        {
+          "value": "cql-headline-3",
+          "label": "Custom Headline 3"
+        },
+        {
+          "value": "h4",
+          "label": "X-Small"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "X-Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Headline size"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media",
+      "name": "Media block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Featured image"
+        },
+        {
+          "type": "checkbox",
+          "id": "reverse_order",
+          "label": "Show featured image on right",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Featured headline"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "cql-headline-1",
+              "label": "Custom Headline 1"
+            },
+            {
+              "value": "cql-headline-2",
+              "label": "Custom Headline 2"
+            },
+            {
+              "value": "cql-headline-3",
+              "label": "Custom Headline 3"
+            },
+            {
+              "value": "h4",
+              "label": "X-Small"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            },
+            {
+              "value": "h0",
+              "label": "X-Large"
+            }
+          ],
+          "default": "h3",
+          "label": "Headline size"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Featured collection"
+        },
+        {
+          "type": "text",
+          "id": "cta",
+          "label": "CTA",
+          "default": "Shop All ..."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spotlight"
+    }
+  ]
+}
+{% endschema %}

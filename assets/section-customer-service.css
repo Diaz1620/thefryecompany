@@ -1,0 +1,49 @@
+.customer-service__wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0 5rem;
+}
+
+.customer-service__left-col {
+  width: 100%;
+  padding-right: 6rem;
+  max-width: 77rem;
+}
+
+.customer-service__right-col {
+  margin-bottom: 6rem;
+}
+
+.section-customer-service .info-accordion details {
+  border-top: none;
+}
+
+.section-customer-service .quick-links {
+  border-top: 0.1rem solid var(--color-border);
+  list-style: none;
+  padding: 2rem;
+}
+
+.customer-service__accordion + .customer-service__heading {
+  margin-top: 5rem;
+}
+
+.customer-service__default-main-content {
+  margin-bottom: 5rem;
+}
+
+@media screen and (max-width: 990px) {
+  .customer-service__wrapper {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .customer-service__left-col {
+    padding-right: 0;
+  }
+
+  .customer-service__right-col {
+    width: 100%;
+    margin-top: 5rem;
+  }
+}

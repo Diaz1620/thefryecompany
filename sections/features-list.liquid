@@ -1,0 +1,337 @@
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-features-list.css' | asset_url }}" media="print" onload="this.media='all'">
+
+
+
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'section-features-list.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div id="features-list-{{section.id}}" class="features-list center {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+    <header class="animated {{section.settings.features_head_animation}}">
+    {% style %}
+      #features-list-{{section.id}} header.animated.active {
+        animation-duration: {{section.settings.features_head_animation_time}};
+        animation-fill-mode: both;
+        -webkit-animation-duration: {{section.settings.features_head_animation_time}};
+        -webkit-animation-fill-mode: both;
+      }
+    {% endstyle %}
+      <h2 class="features-list__heading {{ section.settings.heading_size }}"
+        {% if section.settings.heading_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.heading_color }};" {% endif %}>
+          {{ section.settings.heading | escape }}
+      </h2>
+    </header>
+    {%- endif -%}
+
+    <div class="features-list__blocks grid grid--1-col {% if section.blocks.size == 4 %} grid--2-col-tablet grid--4-col-desktop{% else %} grid--3-col-tablet{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'feature' -%}
+            {% assign img = block.settings.image %}
+            {% assign img_width = img.width | at_most: 180 %}
+            {% style %}
+              #features-list-{{block.id}}.animated.active {
+                animation-duration: {{block.settings.features_list_animation_time}};
+                animation-fill-mode: both;
+                -webkit-animation-duration: {{block.settings.features_list_animation_time}};
+                -webkit-animation-fill-mode: both;
+              }
+            {% endstyle %}
+
+            <div id="features-list-{{block.id}}" class="features-list__feature grid__item animated {{block.settings.features_list_animation}}">
+              <div class="media media--transparent {% if block.settings.image_hover == 'easein' %} hoverAnimation {% endif %}">
+                <img src="{{ img | image_url: width: img_width }}"
+                  width="{{ img.width }}"
+                  height="{{ img.width | divided_by: img.aspect_ratio | ceil }}"
+                  alt="{{ img.alt | escape }}"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="features-list__content">
+                <h4 class="features-list__feature-heading rte"
+                  {% if section.settings.feature_heading_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.feature_heading_color }};" {% endif %}>
+                   {{ block.settings.heading }}
+                </h4>
+                <div class="features-list__feature-text rte"
+                  {% if section.settings.feature_text_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.feature_text_color }};" {% endif %} {{ block.shopify_attributes }}>
+                   {{ block.settings.description }}
+                </div>
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {% if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+  .features-list__heading {
+    color: {{ section.settings.heading_color }};
+  }
+  {% endif %}
+
+  {% if section.settings.feature_heading_color != 'rgba(0,0,0,0)' %}
+  .features-list__feature-heading {
+    color: {{ section.settings.feature_heading_color }};
+  }
+  {% endif %}
+
+  {% if section.settings.feature_text_color != 'rgba(0,0,0,0)' %}
+  .features-list__feature-text p {
+    color: {{ section.settings.feature_text_color }};
+  }
+  {% endif %}
+
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .features-list {
+      padding: {{ section.settings.mobile_top_padding }}px 0 {{ section.settings.mobile_bottom_padding }}px;
+    {% if section.settings.background_mobile %}
+      background: url({{ section.settings.background_mobile | image_url }});
+      background-size:cover;
+      background-position: center center;
+    {% endif %}
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .features-list {
+      padding: {{ section.settings.desktop_top_padding }}px 0 {{ section.settings.desktop_bottom_padding }}px;
+    {% if section.settings.background_desktop %}
+      background: url({{ section.settings.background_desktop | image_url }});
+      background-size:cover;
+      background-position: center center;
+    {% endif %}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Features list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading options",
+      "info": "Optional"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Headline"
+    },
+
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "cql-headline-1",
+          "label": "Custom Headline 1"
+        },
+        {
+          "value": "cql-headline-2",
+          "label": "Custom Headline 2"
+        },
+        {
+          "value": "cql-headline-3",
+          "label": "Custom Headline 3"
+        },
+        {
+          "value": "h4",
+          "label": "X-Small"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "X-Large"
+        }
+      ],
+      "default": "h2",
+      "label": "Headline size"
+    },
+    {
+      "type": "select",
+      "id": "features_head_animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "NoEffect",
+      "label": "Select Headline Animation"
+    },
+    {
+      "type": "text",
+      "id": "features_head_animation_time",
+      "default":"0.2s",
+      "label": "Select Headline Animation Time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_desktop",
+      "label": "Desktop image",
+      "info": "An aspect ratio of 16:9 is recommended."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_mobile",
+      "label": "Mobile image",
+      "info": "An aspect ratio of 1:3 is recommended."
+    },
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color"
+    },
+    {
+      "type": "color",
+      "id": "feature_heading_color",
+      "label": "Feature heading color"
+    },
+    {
+      "type": "color",
+      "id": "feature_text_color",
+      "label": "Feature text color"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon"
+        },
+        {
+          "type": "select",
+          "id": "image_hover",
+          "options": [
+            {
+              "value": "easein",
+              "label": "Ease in"
+            },
+            {
+              "value": "noeffect",
+              "label": "No effect"
+            }
+          ],
+          "default": "noeffect",
+          "label": "Image hover"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Feature",
+          "label": "Headline"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Share information about a feature with your customers.</p>",
+          "info": "Limit text to 2 lines."
+        },
+        {
+          "type": "select",
+          "id": "features_list_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select Features List Animation"
+        },
+        {
+          "type": "text",
+          "id": "features_list_animation_time",
+          "default": "0.2s",
+          "label": "Select Headline Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features list"
+    }
+  ]
+}
+{% endschema %}

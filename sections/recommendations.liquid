@@ -1,0 +1,402 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+{{ 'recommendations.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+{{ section.id }} .recommendations .animated.active {
+  animation-duration: {{ section.settings.animation_time }};
+  animation-fill-mode: both;
+  -webkit-animation-duration: {{ section.settings.animation_time }};
+  -webkit-animation-fill-mode: both;
+}
+{% endstyle %}
+
+<div class="recommendations page-width page-width--narrow {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};" data-section-id="{{ section.id }}" >
+  <div class="recommendations__head">
+    <div class="recommendations__eyebrow {{ section.settings.eyebrow_style }}" {% if section.settings.text_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.text_color }};"{% endif %}>
+      {{ section.settings.eyebrow }}
+    </div>
+
+    <h2 class="recommendations__heading {{ section.settings.heading_size }}" {% if section.settings.text_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.text_color }};"{% endif %}>
+      {{ section.settings.heading }}
+    </h2>
+
+    <div class="recommendations__description {{ section.settings.description_style }}" {% if section.settings.text_color != 'rgba(0,0,0,0)' %} style="color: {{ section.settings.text_color }};"{% endif %}>
+      {{ section.settings.description }}
+    </div>
+  </div>
+
+  <div class="recommendations__carousel">
+    {% for block in section.blocks %}
+      <div class="product-card">
+        {% render 'product-card',
+          product_card_product: block.settings.product,
+          media_size: section.settings.image_ratio,
+          show_secondary_image: section.settings.show_secondary_image,
+          add_image_padding: section.settings.add_image_padding,
+          show_vendor: section.settings.show_vendor,
+          show_image_outline: section.settings.show_image_outline,
+          show_rating: section.settings.show_rating,
+          show_product_labels: section.settings.show_product_labels
+        %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+@media screen and (max-width: 750px) {
+  {{ section_selector }} .recommendations {
+    padding: {{ section.settings.mobile_top_padding }}px 0 {{ section.settings.mobile_bottom_padding }}px;
+  {% if section.settings.background_mobile %}
+    background: url({{ section.settings.background_mobile | image_url }});
+    background-size:cover;
+    background-position: center center;
+  {% endif %}
+  }
+}
+
+@media screen and (min-width: 749px) {
+  {{ section_selector }} .recommendations {
+    padding: {{ section.settings.desktop_top_padding }}px 0 {{ section.settings.desktop_bottom_padding }}px;
+  {% if section.settings.background_desktop %}
+    background: url({{ section.settings.background_desktop | image_url }});
+    background-size:cover;
+    background-position: center center;
+  {% endif %}
+  }
+}
+
+{% endstyle %}
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+
+    cellAlign = (window.innerWidth > 450) ? "left" : "center";
+
+    let flkty = new Flickity(
+      document.querySelector('#shopify-section-{{ section.id }} .recommendations__carousel'),
+      {
+        "autoPlay": false,
+        "prevNextButtons": false,
+        "pageDots": false,
+        "cellAlign": cellAlign,
+        "freeScroll": true,
+        "contain": true,
+      }
+    );
+  })
+</script>
+
+{% schema %}
+{
+  "name": "Recommendations",
+  "tag": "section",
+  "class": "featured-styles",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Eyebrow",
+      "info": "Optional"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_style",
+      "label": "Eyebrow style",
+      "default": "frye-eyebrow",
+      "options": [
+        {
+          "value": "frye-eyebrow",
+          "label": "Eyebrow - Small"
+        },
+        {
+          "value": "frye-eyebrow-large",
+          "label": "Eyebrow - Large"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "default": "frye-headline-2",
+      "label": "Text size",
+      "options": [
+        {
+          "value": "frye-headline-0",
+          "label": "X-Large"
+        },
+        {
+          "value": "frye-headline-1",
+          "label": "Large"
+        },
+        {
+          "value": "frye-headline-2",
+          "label": "Medium"
+        },
+        {
+          "value": "frye-headline-3",
+          "label": "Small"
+        },
+        {
+          "value": "frye-headline-4",
+          "label": "X-Small"
+        },
+        {
+          "value": "frye-headline-5",
+          "label": "Tiny"
+        },
+        {
+          "value": "frye-headline-6",
+          "label": "Very Tiny"
+        },
+        {
+          "value": "frye-headline-7",
+          "label": "Custom 1"
+        },
+        {
+          "value": "frye-headline-8",
+          "label": "Custom 2"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Description",
+      "info": "Optional"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "description_style",
+      "label": "Text style",
+      "default": "frye-body",
+      "options": [
+        {
+          "value": "frye-body",
+          "label": "Body - Default"
+        },
+        {
+          "value": "frye-body-small",
+          "label": "Body - Small"
+        },
+        {
+          "value": "text-body-medium",
+          "label": "Body - Medium"
+        },
+        {
+          "value": "text-body-large",
+          "label": "Body - Large"
+        },
+        {
+          "value": "frye-eyebrow",
+          "label": "Eyebrow - Small"
+        },
+        {
+          "value": "frye-eyebrow-large",
+          "label": "Eyebrow - Large"
+        },
+        {
+          "value": "frye-pullquote",
+          "label": "Pullquote"
+        },
+        {
+          "value": "caption",
+          "label": "Caption"
+        },
+        {
+          "value": "subtitle",
+          "label": "Subtitle"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "options":[
+        {
+          "value": "fadeIn",
+          "label": "Fade In"
+        },
+        {
+          "value": "fadeInUp",
+          "label": "Fade In Up"
+        },
+        {
+          "value": "NoEffect",
+          "label": "No Effect"
+        }
+      ],
+      "default": "NoEffect",
+      "label": "Select animation"
+    },
+    {
+      "type": "text",
+      "id": "animation_time",
+      "default":"0.2s",
+      "label": "Select animation time",
+      "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+    },
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "info": "Optional"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_desktop",
+      "label": "Desktop image",
+      "info": "An aspect ratio of 16:9 is recommended."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_mobile",
+      "label": "Mobile image",
+      "info": "An aspect ratio of 1:3 is recommended."
+    },
+    {
+      "type": "header",
+      "content": "Product card options"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_image_padding",
+      "default": false,
+      "label": "Add image padding"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_outline",
+      "default": true,
+      "label": "Show image border"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_labels",
+      "default": true,
+      "label": "Show product label"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Product",
+      "type": "product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recommendations"
+    }
+  ]
+}
+{% endschema %}

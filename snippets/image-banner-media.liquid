@@ -1,0 +1,49 @@
+{% comment %}
+  Renders an image background which supports high pixel density screens by default.
+
+  Accepts:
+  - desktop_image: {image} Image to display at desktop resolutions.
+  - (Optional) mobile_image: {image} Image to display at mobile resolutions.
+
+  Usage:
+  {% render 'image-banner-media',
+  desktop_image: section.settings.desktop_image,
+  mobile_image: section.settings.mobile_image
+  %}
+
+{% endcomment %}
+
+<div class="banner__media media">
+  {%- if desktop_large_image != blank -%}
+    <div class="banner__media banner__media--large-screens medium-hide small-hide media">
+      {% render 'image',
+        image: desktop_large_image,
+        image_max_width: 2800,
+        image_desired_width: desktop_large_image.width,
+        style: "max-width: 100%; height: 100%;"
+        %}
+    </div>
+  {%- endif -%}
+
+  {%- if desktop_image != blank -%}
+    <div class="banner__media media {% if desktop_large_image != blank %}banner__media--large-screens--hide{% endif %} {% if mobile_image != blank %}medium-hide small-hide{% endif %}">
+      {% render 'image',
+        image: desktop_image,
+        image_max_width: 2800,
+        image_desired_width: desktop_image.width,
+        style: "max-width: 100%; height: 100%;"
+        %}
+    </div>
+  {%- endif -%}
+
+  {%- if mobile_image != blank -%}
+    <div class="banner__media media large-up-hide">
+      {% render 'image',
+        image: mobile_image,
+        image_max_width: 1100,
+        image_desired_width: mobile_image.width,
+        style: "max-width: 100%; height: 100%;"
+        %}
+    </div>
+  {%- endif -%}
+</div>

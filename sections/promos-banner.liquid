@@ -1,0 +1,63 @@
+{{ 'component-promos-banner.css' | asset_url | stylesheet_tag }}
+
+<div class="promos-banner-container">
+  <div class="promos-banner page-width">
+
+    {% for promo in section.blocks %}
+      <div class="promo">
+        {% if promo.settings.image %}
+          <div class="promo__image">
+            <img src="{{ promo.settings.image | image_url: width: 200 }}" alt="{{ promo.settings.image.alt }}" height="200"
+              width="{{ promo.settings.image.aspect_ratio | times: 200 | floor }}" loading="lazy">
+          </div>
+        {% endif %}
+
+        <div class="promo__content promo-content">
+          {% if promo.settings.message != blank %}
+            <div class="promo-content__message">{{ promo.settings.message }}</div>
+          {% endif %}
+
+          {% if promo.settings.link_label != blank and promo.settings.link_url != blank %}
+            <a class="link link--text" href="{{ promo.settings.link_url }}">{{ promo.settings.link_label }}</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promos banner",
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "name": "Promo",
+      "type": "promo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "message",
+          "label": "Message"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,94 @@
+.info-accordion {
+  width: 100%;
+  padding: 0;
+  border-bottom: 1px solid;
+}
+
+.info-accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-accordion details {
+  border-top: 1px solid;
+}
+
+.info-accordion .accordion__content {
+  margin-bottom: 2rem;
+}
+
+.info-accordion .status-indicator {
+  display: flex;
+  width: 1.5rem;
+  height: 2rem;
+  margin: 0 0 0 1rem;
+  transition: all ease-in-out 100ms;
+}
+
+.info-accordion .status-indicator svg {
+  width: 100%;
+  height: auto;
+}
+
+.info-accordion details[open] .status-indicator {
+  transform: rotate(-180deg);
+}
+
+@media screen and (min-width: 750px) {
+  .info-accordion__heading {
+    font-size: 3rem;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .info-accordion__heading {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+  }
+
+  .accordion {
+    margin-top: 0 !important;
+  }
+}
+
+.accordion {
+  border-top: 0.1rem solid var(--color-styleguide-gray) !important;
+  border-bottom: unset !important;
+}
+
+details[open] .accordion__title {
+  font-weight: bold;
+}
+
+.info-accordion {
+  border-bottom: 0.1rem solid var(--color-styleguide-gray) !important;
+}
+
+@media screen and (min-width: 750px) {
+  .info-accordion {
+    margin-bottom: 5rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .info-accordion {
+    margin-bottom: 3.3rem;
+  }
+}
+
+.info-accordion details {
+  border-top: unset;
+}
+
+.page-handle--the-frye-exchange .shopify-section.section-info-accordion {
+  margin-top: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .page-handle--the-frye-exchange .info-accordion {
+    max-width: 70rem !important;
+  }
+}

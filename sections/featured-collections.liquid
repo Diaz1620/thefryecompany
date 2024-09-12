@@ -1,0 +1,340 @@
+{{ 'section-featured-collections.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+
+<div class="featured-collections  {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};" data-section-id="{{ section.id }}" >
+  <div class="featured-collections__head page-width">
+    <h2 class="featured-collections__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+    <div class="featured-collections__collection-selectors" style="{% unless section.blocks.size > 1 %}display: none;{% endunless %}">
+      {%- comment %}<locksmith:0a48>{% endcomment -%}
+        {%- assign locksmith_985a_forloop__size = 0 %}{% for block in section.blocks %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.collection, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == 'true' %}{% assign locksmith_985a_forloop__size = locksmith_985a_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_985a_forloop__index = nil -%}
+      {%- comment %}</locksmith:0a48>{% endcomment -%}
+      {% for block in section.blocks %}
+
+        {%- comment %}<locksmith:1d22>{% endcomment -%}
+          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.collection, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% if locksmith_985a_forloop__index == nil %}{% assign locksmith_985a_forloop__index = 1 %}{% assign locksmith_985a_forloop__index0 = 0 %}{% else %}{% assign locksmith_985a_forloop__index = locksmith_985a_forloop__index | plus: 1 %}{% assign locksmith_985a_forloop__index0 = locksmith_985a_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_985a_forloop__index == 1 %}{% assign locksmith_985a_forloop__first = true %}{% else %}{% assign locksmith_985a_forloop__first = false %}{% endif %}{% if locksmith_985a_forloop__index == locksmith_985a_forloop__size %}{% assign locksmith_985a_forloop__last = true %}{% else %}{% assign locksmith_985a_forloop__last = false %}{% endif %}{% assign locksmith_985a_forloop__rindex = locksmith_985a_forloop__size | minus: locksmith_985a_forloop__index | minus: 1 %}{% assign locksmith_985a_forloop__rindex0 = locksmith_985a_forloop__size | minus: locksmith_985a_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+        {%- comment %}</locksmith:1d22>{% endcomment -%}
+
+        {% assign tab_nav_label = block.settings.tab_nav_label | default: block.settings.collection.title %}
+
+        <button class="featured-collections__collection-selector button {% if locksmith_985a_forloop__first %} active{% endif %}" data-block-id="{{ block.id }}">
+          <p>{{ tab_nav_label }}</p>
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="featured-collections__collection-carousels">
+    {%- comment %}<locksmith:db83>{% endcomment -%}
+      {%- assign locksmith_9952_forloop__size = 0 %}{% for block in section.blocks %}{% capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.collection, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == 'true' %}{% assign locksmith_9952_forloop__size = locksmith_9952_forloop__size | plus: 1 %}{% endif %}{% endfor %}{% assign locksmith_9952_forloop__index = nil -%}
+    {%- comment %}</locksmith:db83>{% endcomment -%}
+    {% for block in section.blocks %}
+      {%- comment %}<locksmith:ca1d>{% endcomment -%}
+        {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.collection, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% if locksmith_9952_forloop__index == nil %}{% assign locksmith_9952_forloop__index = 1 %}{% assign locksmith_9952_forloop__index0 = 0 %}{% else %}{% assign locksmith_9952_forloop__index = locksmith_9952_forloop__index | plus: 1 %}{% assign locksmith_9952_forloop__index0 = locksmith_9952_forloop__index0 | plus: 1 %}{% endif %}{% if locksmith_9952_forloop__index == 1 %}{% assign locksmith_9952_forloop__first = true %}{% else %}{% assign locksmith_9952_forloop__first = false %}{% endif %}{% if locksmith_9952_forloop__index == locksmith_9952_forloop__size %}{% assign locksmith_9952_forloop__last = true %}{% else %}{% assign locksmith_9952_forloop__last = false %}{% endif %}{% assign locksmith_9952_forloop__rindex = locksmith_9952_forloop__size | minus: locksmith_9952_forloop__index | minus: 1 %}{% assign locksmith_9952_forloop__rindex0 = locksmith_9952_forloop__size | minus: locksmith_9952_forloop__index0 | minus: 1 %}{% else %}{% continue %}{% endif -%}
+      {%- comment %}</locksmith:ca1d>{% endcomment -%}
+      <div class="featured-collections__collection{% if locksmith_9952_forloop__first %} active{% endif %}" data-block-id="{{ block.id }}">
+
+        <div class="featured-collections__collection-inner page-width">
+          {% for product in block.settings.collection.products %}
+            {%- comment %}<locksmith:52c2>{% endcomment -%}
+              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: block.settings.collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+            {%- comment %}</locksmith:52c2>{% endcomment -%}
+            <div class="product-card">
+              {% render 'product-card',
+                product_card_product: product,
+                media_size: section.settings.image_ratio,
+                show_secondary_image: section.settings.show_secondary_image,
+                add_image_padding: section.settings.add_image_padding,
+                show_vendor: section.settings.show_vendor,
+                show_image_outline: section.settings.show_image_outline,
+                show_rating: section.settings.show_rating,
+                show_product_labels: section.settings.show_product_labels,
+                image_hover: section.settings.image_hover
+              %}
+            </div>
+          {% endfor %}
+        </div>
+
+        {% assign cta_label_prefix = 'sections.featured_collections.shop_all_prefix' | t %}
+        {% assign cta_label_default = cta_label_prefix | append: block.settings.collection.title %}
+
+        {% assign cta_label = block.settings.button_label | default: cta_label_default %}
+        {% assign cta_link = block.settings.button_link | default: block.settings.collection.url %}
+        {% assign cta_style = block.settings.button_style | default: "primary" %}
+
+        <a href="{{ cta_link }}" class="button button--{{ cta_style }}">{{ cta_label }}</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  {% if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+  {{ section_selector }}.featured-collections__heading {
+    color: {{ section.settings.heading_color }};
+  }
+  {% endif %}
+{% endstyle %}
+
+<script type="text/javascript">
+  let sectionSelector = '#shopify-section-{{ section.id }}';
+  let collectionSelectors = document.querySelectorAll(`${sectionSelector} .featured-collections__collection-selector`);
+
+  for( let collectionSelector of collectionSelectors ) {
+    let blockId = collectionSelector.dataset.blockId;
+
+    let collectionCarousel = document.querySelector(`${sectionSelector} .featured-collections__collection[data-block-id="${blockId}"]`);
+    let otherCarousels = document.querySelectorAll(`${sectionSelector} .featured-collections__collection:not([data-block-id="${blockId}"])`);
+
+    collectionSelector.addEventListener('click', () => {
+
+      for( let otherCarousel of otherCarousels ) {
+        otherCarousel.classList.remove('active');
+      }
+
+      for( let collectionSelector of collectionSelectors ) {
+        collectionSelector.classList.remove('active');
+      }
+
+      collectionSelector.classList.add('active');
+      collectionCarousel.classList.add('active');
+
+      window.dispatchEvent(new Event('resize'));
+    })
+
+    window.addEventListener('DOMContentLoaded', () => initFlickity(collectionCarousel))
+    window.addEventListener('resize', () => initFlickity(collectionCarousel))
+  }
+
+  initFlickity = (collectionCarousel) => {
+    let collectionCarouselInner = collectionCarousel.querySelector('.featured-collections__collection-inner');
+
+    cellAlign = (window.innerWidth > 450) ? "left" : "center";
+
+    if(collectionCarouselInner) {
+      let flkty = new Flickity( collectionCarouselInner, {
+        autoPlay: false,
+        prevNextButtons: true,
+        pageDots: false,
+        cellAlign: cellAlign,
+      });
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Featured collections",
+  "tag": "section",
+  "class": "featured-styles spaced-section spaced-section--full-width",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Headline"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "cql-headline-1",
+          "label": "Custom Headline 1"
+        },
+        {
+          "value": "cql-headline-2",
+          "label": "Custom Headline 2"
+        },
+        {
+          "value": "cql-headline-3",
+          "label": "Custom Headline 3"
+        },
+        {
+          "value": "h4",
+          "label": "X-Small"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "X-Large"
+        }
+      ],
+      "default": "h2",
+      "label": "Headline size"
+    },
+    {
+      "type": "header",
+      "content": "Product card options"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show secondary image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_image_padding",
+      "default": false,
+      "label": "Show image padding"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_outline",
+      "default": true,
+      "label": "Show image border"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/os20/themes-by-shopify/dawn/sections#featured-collection-show-product-rating)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_labels",
+      "default": true,
+      "label": "Show product label"
+    },
+    {
+      "type": "select",
+      "id": "image_hover",
+      "options": [
+        {
+          "value": "easein",
+          "label": "Ease in"
+        },
+        {
+          "value": "noeffect",
+          "label": "No effect"
+        }
+      ],
+      "default": "noeffect",
+      "label": "Image hover"
+    },
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Headline color"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Collection",
+      "type": "collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "tab_nav_label",
+          "label": "Tab nav label",
+          "info": "If left blank, the tab navigation will be the collection's name."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "info": "If left blank, CTA will read \"Shop all <collection name>\"."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link",
+          "info": "If left blank, the link will navigate to the collection's landing page."
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            },
+            {
+              "value": "link-1",
+              "label": "Link style 1"
+            },
+            {
+              "value": "link-2",
+              "label": "Link style 2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collections"
+    }
+  ]
+}
+{% endschema %}

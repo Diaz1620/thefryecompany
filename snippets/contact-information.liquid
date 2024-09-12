@@ -1,0 +1,54 @@
+<div class="contact-information" style="color: {{ section.settings.text_color }}; background-color: {{ section.settings.background_color }};">
+  {%- if section.settings.section_heading != blank -%}
+    <h3 style="color: {{ section.settings.heading_color }}; background-color: {{ section.settings.heading_background_color }};">{{ section.settings.section_heading }}</h3>
+  {%- endif -%}
+
+  <div class="contact-information__container">
+    {%- if settings.contact_address != blank -%}
+      <div class="contact-information__info contact-information__address">
+        <div class="info">
+          {%- if section.settings.address_heading != blank -%}<h4>{{ section.settings.address_heading }}</h4>{%- endif -%}
+          {{ settings.contact_address }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.hours_available != blank -%}
+      <div class="contact-information__info contact-information__hours">
+        <div class="info">
+          {%- if section.settings.hours_heading != blank -%}<h4>{{ section.settings.hours_heading }}</h4>{%- endif -%}
+          {{ settings.hours_available }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.contact_call != blank -%}
+      <div class="contact-information__info contact-information__telephone">
+        <div class="info">
+          {%- if section.settings.call_heading != blank -%}<h4>{{ section.settings.call_heading }}</h4>{%- endif -%}
+          <a href="{{ settings.contact_call }}" class="link link--text">{{ settings.contact_call }}</a>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.contact_email != blank -%}
+      <div class="contact-information__info contact-information__email">
+        <div class="info">
+          {%- if section.settings.email_heading != blank -%}<h4>{{ section.settings.email_heading }}</h4>{%- endif -%}
+          {{ 'sections.contact_information.email' | t }}
+          <a href="mailto:{{ settings.contact_email }}" class="link link--text">{{ settings.contact_email }}</a>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.contact_chat != blank -%}
+      <div class="contact-information__info contact-information__chat">
+        <div class="info">
+          {%- if section.settings.chat_heading != blank -%}<h4>{{ section.settings.chat_heading }}</h4>{%- endif -%}
+          <a href="{{ settings.contact_chat }}" class="link link--text">{{ 'sections.contact_information.chat_link' | t }}</a>
+          {{ 'sections.contact_information.chat_info' | t }}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

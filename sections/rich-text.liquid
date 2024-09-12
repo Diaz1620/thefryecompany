@@ -1,0 +1,812 @@
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-rich-text.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div id="rich-text-{{ section.id }}" class="rich-text {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" style="background-color: {{ section.settings.background_color }};">
+  <div class="rich-text__blocks">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'eyebrow' -%}
+          <div class="rich-text__eyebrow {{ block.settings.eyebrow_style }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}"
+            {% if block.settings.eyebrow_color != 'rgba(0,0,0,0)' %} style="color: {{ block.settings.eyebrow_color }};"{% endif %}>
+            <span>{{ block.settings.text | escape }}</span>
+          </div>
+
+        {%- when 'heading' -%}
+          <h2 class="rich-text__heading animated {{block.settings.headline_animation}} {{ block.settings.heading_size }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}">{{ block.settings.heading | escape }}</h2>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {% if block.settings.heading_color != 'rgba(0,0,0,0)' %}
+          {{ block_selector }}.rich-text__heading {
+            color: {{ block.settings.heading_color }};
+          }
+          {% endif %}
+           #rich-text-{{ section.id }} {{ block_selector }}.rich-text__heading.animated.active {
+            animation-duration: {{block.settings.headline_animation_time}};
+            animation-fill-mode: both;
+            -webkit-animation-duration: {{block.settings.headline_animation_time}};
+            -webkit-animation-fill-mode: both;
+          }
+          {% endstyle %}
+
+        {%- when 'text' -%}
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          #rich-text-{{ section.id }} {{ block_selector }}.rich-text__description.animated.active {
+            animation-duration: {{block.settings.richtext_animation_time}};
+            animation-fill-mode: both;
+            -webkit-animation-duration: {{block.settings.richtext_animation_time}};
+            -webkit-animation-fill-mode: both;
+          }
+          {% endstyle %}
+
+          <div class="rich-text__description rte animated {{block.settings.richtext_animation}} {{ block.settings.text_style }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}"
+            {% if block.settings.text_color != 'rgba(0,0,0,0)' %} style="color: {{ block.settings.text_color }};"{% endif %}>
+            {{ block.settings.text }}
+          </div>
+
+        {%- when 'button' -%}
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+            #rich-text-{{ section.id }} {{ block_selector }}.rich-text__button-wrapper.animated.active {
+              animation-duration: {{block.settings.button_animation_time}};
+              animation-fill-mode: both;
+              -webkit-animation-duration: {{block.settings.button_animation_time}};
+              -webkit-animation-fill-mode: both;
+            }
+          {% endstyle %}
+
+          <div class="rich-text__button-wrapper {% if block.settings.show_side_by_side %}side-by-side{% endif %} animated {{block.settings.logo_animation}}" {{ block.shopify_attributes }} data-block-id="{{ block.id }}" id="block-section-{{ block.id }}">
+          {%- if block.settings.button_label_1 != blank -%}
+            {% assign showArrow1 = '' %}
+            {% if block.settings.button_style_1 contains 'link-1' %}
+              {% assign showArrow1 = 'right' %}
+            {% endif %}
+
+            {% render 'button',
+              label: block.settings.button_label_1,
+              link: block.settings.button_link_1,
+              variation: block.settings.button_style_1,
+              arrow: showArrow1,
+              class: "rich-text__button"
+            %}
+          {%- endif -%}
+
+          {%- if block.settings.button_label_2 != blank -%}
+            {% if block.settings.show_separator %}
+              <span class="rich-text__button-separator">|</span>
+            {% endif %}
+
+            {% assign showArrow2 = '' %}
+            {% if block.settings.button_style_2 contains 'link-1' %}
+              {% assign showArrow2 = 'right' %}
+            {% endif %}
+
+            {% render 'button',
+              label: block.settings.button_label_2,
+              link: block.settings.button_link_2,
+              variation: block.settings.button_style_2,
+              arrow: showArrow2,
+              class: "rich-text__button"
+            %}
+          {%- endif -%}
+          </div>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+
+          @media screen and (min-width: 750px) {
+            {{ block_selector }}.rich-text__button-wrapper {
+              {% if block.settings.show_side_by_side %}
+                flex-direction: row;
+                justify-content: center;
+              {% endif %}
+            }
+          }
+
+          {{ block_selector }}.rich-text__button-wrapper .rich-text__button-separator {
+            {% if block.settings.show_side_by_side %}
+              color: {{ block.settings.separator_color }};
+            {% endif %}
+          }
+          {% endstyle %}
+
+        {%- when 'logo_list' -%}
+          {% style %}
+          #rich-text-{{ section.id }} .rich-text__logo-list--{{ block.id }}.rich-text__logo-list.animated.active {
+              animation-duration: {{block.settings.animation_time}};
+              animation-fill-mode: both;
+              -webkit-animation-duration: {{block.settings.animation_time}};
+              -webkit-animation-fill-mode: both;
+            }
+          {% endstyle %}
+
+          <div class="rich-text__logo-list rich-text__logo-list--{{ block.id }} animated {{block.settings.logo_animation}}">
+            {%- for i in (1..5) -%}
+              {%- assign logo_image = "logo_image__" | append: i -%}
+              {%- assign logo_link = "logo_link__" | append: i -%}
+
+              {%- unless block.settings[logo_image] == blank -%}
+                <a{% if block.settings[logo_link] == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings[logo_link] }}"{% endif %} class="logo-list-item">
+                  {% assign img = block.settings[logo_image] %}
+                  {% assign img_width = img.width | at_most: 300 %}
+
+                  <img src="{{ img | image_url: width: img_width }}"
+                        width="{{ img_width }}"
+                        height="{{ img_width | divided_by: img.aspect_ratio | ceil }}"
+                        alt="{{ img.alt | escape }}"
+                        loading="lazy"
+                  />
+                </a>
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+
+        {%- when 'padding' -%}
+          {% render 'padding',
+            id: block.id,
+            mobile_padding_amount: block.settings.mobile_padding_amount,
+            desktop_padding_amount: block.settings.desktop_padding_amount
+          %}
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    let chatBtn = document.querySelector('.open_chat');  
+    if (chatBtn) {  
+      chatBtn.addEventListener('click', function() {
+        GorgiasChat.init().then(function() {
+         GorgiasChat.open();  
+        })  
+      })        
+    } 
+  })
+</script>
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .rich-text {
+      {% if section.settings.background_mobile_image %}
+      background-repeat: no-repeat;
+      background-image: url({{ section.settings.background_mobile_image | image_url }});
+      {% endif %}
+      padding: {{ section.settings.mobile_top_padding }}px 0 {{ section.settings.mobile_bottom_padding }}px;
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .rich-text {
+      {% if section.settings.background_desktop_image %}
+      background-repeat: no-repeat;
+      background-image: url({{ section.settings.background_desktop_image | image_url }});
+      {% endif %}
+      padding: {{ section.settings.desktop_top_padding }}px 0 {{ section.settings.desktop_bottom_padding }}px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "rich-text__section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Eyebrow",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "eyebrow_style",
+          "label": "Eyebrow style",
+          "default": "frye-eyebrow",
+          "options": [
+            {
+              "value": "frye-eyebrow",
+              "label": "Eyebrow - Small"
+            },
+            {
+              "value": "frye-eyebrow-large",
+              "label": "Eyebrow - Large"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Headline",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Talk about your brand",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "frye-headline-0",
+              "label": "X-Large"
+            },
+            {
+              "value": "frye-headline-1",
+              "label": "Large"
+            },
+            {
+              "value": "frye-headline-2",
+              "label": "Medium"
+            },
+            {
+              "value": "frye-headline-3",
+              "label": "Small"
+            },
+            {
+              "value": "frye-headline-4",
+              "label": "X-Small"
+            },
+            {
+              "value": "frye-headline-5",
+              "label": "Tiny"
+            },
+            {
+              "value": "frye-headline-6",
+              "label": "Very Tiny"
+            },
+            {
+              "value": "frye-headline-7",
+              "label": "Custom 1"
+            }, {
+              "value": "frye-headline-8",
+              "label": "Custom 2"
+            }
+          ],
+          "default": "frye-headline-1",
+          "label": "Headline size"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Headline color",
+          "default": "#000000"
+        },
+        {
+          "type": "header",
+          "content": "Block animations"
+        },
+        {
+          "type": "select",
+          "id": "headline_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "fadeInLeft",
+              "label": "Fade In Left"
+            },
+            {
+              "value": "fadeInRight",
+              "label": "Fade In Right"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select Headline Animation"
+        },
+        {
+          "type": "text",
+          "id": "headline_animation_time",
+          "default": "0.2s",
+          "label": "Headline Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "default": "frye-body",
+          "options": [
+            {
+              "value": "frye-body",
+              "label": "Body - Default"
+            },
+            {
+              "value": "frye-body-small",
+              "label": "Body - Small"
+            },
+            {
+              "value": "text-body-medium",
+              "label": "Body - Medium"
+            },
+            {
+              "value": "text-body-large",
+              "label": "Body - Large"
+            },
+            {
+              "value": "frye-eyebrow",
+              "label": "Eyebrow"
+            },
+            {
+              "value": "frye-pullquote",
+              "label": "Pullquote"
+            },
+            {
+              "value": "caption",
+              "label": "Caption"
+            }, {
+              "value": "subtitle",
+              "label": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Description color",
+          "default": "#000000"
+        },
+        {
+          "type": "header",
+          "content": "Block animations"
+        },
+        {
+          "type": "select",
+          "id": "richtext_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "fadeInLeft",
+              "label": "Fade In Left"
+            },
+            {
+              "value": "fadeInRight",
+              "label": "Fade In Right"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select RichText Animation"
+        },
+        {
+          "type": "text",
+          "id": "richtext_animation_time",
+          "default": "0.2s",
+          "label": "RichText Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Button 1 options"
+        },
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "default": "Button label",
+          "label": "Label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_1",
+          "label": "Style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "primary-dark",
+              "label": "Primary on Dark Background"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "secondary-dark",
+              "label": "Secondary on Dark Background"
+            },
+            {
+              "value": "link-1",
+              "label": "Link style 1"
+            },
+            {
+              "value": "link-1-dark",
+              "label": "Link style 1 on Dark Background"
+            },
+            {
+              "value": "link-2",
+              "label": "Link style 2"
+            },
+            {
+              "value": "link-2-dark",
+              "label": "Link style 2 on Dark Background"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Button 2 options"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "default": "Button label",
+          "label": "Label",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style_2",
+          "label": "Style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "primary-dark",
+              "label": "Primary on Dark Background"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "secondary-dark",
+              "label": "Secondary on Dark Background"
+            },
+            {
+              "value": "link-1",
+              "label": "Link style 1"
+            },
+            {
+              "value": "link-1-dark",
+              "label": "Link style 1 on Dark Background"
+            },
+            {
+              "value": "link-2",
+              "label": "Link style 2"
+            },
+            {
+              "value": "link-2-dark",
+              "label": "Link style 2 on Dark Background"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Block options"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_side_by_side",
+          "default": false,
+          "label": "Display buttons side-by-side"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_separator",
+          "default": false,
+          "label": "Display buttons separator"
+        },
+        {
+          "type": "color",
+          "id": "separator_color",
+          "label": "Separator color"
+        },
+        {
+          "type": "header",
+          "content": "Block animations"
+        },
+        {
+          "type": "select",
+          "id": "button_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "fadeInLeft",
+              "label": "Fade In Left"
+            },
+            {
+              "value": "fadeInRight",
+              "label": "Fade In Right"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select Button Animation"
+        },
+        {
+          "type": "text",
+          "id": "button_animation_time",
+          "default":"0.2s",
+          "label": "Button Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        }
+      ]
+    },
+    {
+      "type": "logo_list",
+      "name": "Logo list",
+      "limit": 2,
+      "settings": [
+        {
+        "type": "header",
+        "content": "Logo item 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image__1",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "logo_link__1",
+          "label": "Logo link"
+        },
+        {
+        "type": "header",
+        "content": "Logo item 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image__2",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "logo_link__2",
+          "label": "Logo link"
+        },
+        {
+        "type": "header",
+        "content": "Logo item 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image__3",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "logo_link__3",
+          "label": "Logo link"
+        },
+        {
+        "type": "header",
+        "content": "Logo item 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image__4",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "logo_link__4",
+          "label": "Logo link"
+        },
+        {
+        "type": "header",
+        "content": "Logo item 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image__5",
+          "label": "Logo image"
+        },
+        {
+          "type": "url",
+          "id": "logo_link__5",
+          "label": "Logo link"
+        },
+        {
+          "type": "header",
+          "content": "Block animiations"
+        },
+        {
+          "type": "select",
+          "id": "logo_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "fadeInLeft",
+              "label": "Fade In Left"
+            },
+            {
+              "value": "fadeInRight",
+              "label": "Fade In Right"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select Logo Animation"
+        },
+        {
+          "type": "text",
+          "id": "animation_time",
+          "default": "0.2s",
+          "label": "Logo Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        }
+      ]
+    },
+    {
+      "type": "padding",
+      "name": "Padding",
+      "settings": [
+        {
+          "type": "number",
+          "id": "mobile_padding_amount",
+          "label": "Mobile padding (px)"
+        },
+        {
+          "type": "number",
+          "id": "desktop_padding_amount",
+          "label": "Desktop padding (px)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

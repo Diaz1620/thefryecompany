@@ -1,0 +1,201 @@
+.block{
+  display:block
+}
+.recurate-container {
+  width: 80% !important;
+  max-width: 80% !important;
+}
+
+.recurate-container .recurate-h1, 
+.recurate-container .recurate-h2, 
+.recurate-card-secondary .recurate-h1, 
+.recurate-card-secondary .recurate-h2 {
+  font-family: var(--font-body-family) !important;
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 31px !important;
+  color: #000 !important;
+}
+
+.h3-recurate, .recurate-h3 {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  font-family: var(--font-body-family) !important;
+  margin: 0 !important;
+}
+ 
+.recurate-h5 {
+  font-family: var(--font-body-family) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04px !important;
+  line-height: 21px !important;
+}
+
+.recurate-container p,
+.recurate-body,
+.recurate-input {
+  font-family: var(--font-body-family) !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+  color: #000 !important;
+}
+
+#recurate-submissions-index-title {
+  margin: 0 0 10px 0;
+}
+  
+#recurate-submissions-index-subtitle > p {
+  margin: 0;  
+}
+
+.recurate-btn-primary {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  background-color: black !important;
+  appearance: initial !important;
+  font-family: var(--font-body-family) !important;
+}
+
+.recurate-btn-primary:focus {
+  border: 1px solid #000 !important;
+}
+
+.recurate-container ul {
+  padding-left: 15px;
+  list-style-position: outside;
+  list-style-type: disc;
+  margin-top: 1rem;
+}
+
+.recurate-container ul li {
+  font-family: var(--font-body-family) !important;
+  font-size: 14px !important;
+  line-height: normal !important;
+}
+
+.card-body p {
+  margin-top: 0 !important;
+}
+
+.recurate-container .recurate-btn-secondary, .recurate-container button.recurate-btn-secondary[type=submit], .recurate-container a.recurate-btn-secondary, .recurate-card-secondary .recurate-btn-secondary, .recurate-card-secondary button.recurate-btn-secondary[type=submit], .recurate-card-secondary a.recurate-btn-secondary {
+  background-color: var(--recurate-secondary-btn-background);
+  color: var(--recurate-secondary-btn-color);
+  border: 1px solid var(--recurate-secondary-btn-color);
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  border-radius: 0 !important;
+  appearance: initial !important;
+  font-family: var(--font-body-family) !important;
+}
+.recurate-container .recurate-btn-secondary:focus {
+  border: 1px solid #000 !important;
+}
+
+.breadcrumbs {
+  display: none;
+}
+
+.product-image-size, .product-image-size img {
+  object-fit: contain;
+}
+
+img.display-block {
+  object-fit: contain;
+}
+
+.recurate-h3 .recurate-tooltip svg {
+  margin-top: 6px;
+}
+
+.tos-div.recurate-body {
+  align-items: center;
+}
+
+input[type=checkbox]:before {
+  margin-left: 4px;
+  margin-top: -2px;
+}
+
+#orders-div {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+  display: grid !important;
+}
+
+#orders-div > .recurate-h4 {
+  grid-column: 1 / -1;
+}
+
+.recurate-container .card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+}
+
+#orders-div .card {
+  border: 1px solid #BDBDBD !important;
+  margin: 1rem;
+}
+
+#orders-div .card-body .recurate-product-info-div {
+  padding-bottom: 3rem;
+}
+
+#orders-div .card-body .recurate-product-info-div .recurate-h5, #orders-div .card-body .recurate-product-info-div .recurate-body {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 256px;
+  line-height: 26px;
+  text-align: center;
+  color: black !important;
+}
+
+#orders-div .card-body .recurate-image-div, #orders-div .card-body .recurate-product-info-div {
+  max-width: 100% !important;
+}
+
+#orders-div .card-body {
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+#orders-div .card-body button {
+  margin-top: 1rem !important;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+#orders-div .card-body .recurate-image-div .product-image-size {
+  margin: auto;
+}
+
+#orders-div .card-body .recurate-product-info-div .recurate-h5 {
+  margin-bottom: 0 !important;
+  margin-top: 2rem;
+}
+
+#orders-div .card-body .recurate-product-info-div .recurate-h5, #orders-div .card-body .recurate-product-info-div .recurate-body {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 256px;
+  line-height: 26px;
+  text-align: center;
+  color: black !important;
+}
+
+#orders-div .card-body strong {
+  color: black !important;
+  font-weight: 400 !important;
+}

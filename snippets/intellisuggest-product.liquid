@@ -1,0 +1,18 @@
+<!-- Searchspring IntelliSuggest Tracking -->
+{% comment %}theme-check-disable{% endcomment %}
+<script type="text/javascript" src="//cdn.searchspring.net/intellisuggest/is.min.js"></script>
+{% comment %}theme-check-enable{% endcomment %}
+
+<script type="text/javascript">
+  try {
+    var product_code = "{{ product.variants[0].sku }}";
+    IntelliSuggest.init({ siteId: "{{ settings.key_searchspring_app_key }}", context: "Product/" + product_code, seed: product_code });
+
+    {% if customer %}
+    IntelliSuggest.setShopperId({{ customer.id }});
+  {% endif %}
+
+  IntelliSuggest.viewItem({ sku: product_code });
+} catch (err) { }
+</script>
+<!-- END Searchspring IntelliSuggest -->

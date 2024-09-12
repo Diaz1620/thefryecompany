@@ -1,0 +1,13 @@
+<h1 class="helper-heading sizing-heading">SIZE CHARTS</h1>
+<div class="sizing-container">
+  {% assign size_charts = shop.metaobjects.size_chart.values %}
+
+  {% for chart in size_charts %}
+   {%  assign applies_to = chart.allowed_product_types | append: ' ' %}
+      {% if applies_to contains product.type %}
+         {{ chart.chart_table }}
+         {% break %}
+      {% endif %}
+  {% endfor %}
+</div>
+

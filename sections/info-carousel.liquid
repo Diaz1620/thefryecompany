@@ -1,0 +1,443 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+{{ 'section-info-carousel.css' | asset_url | stylesheet_tag }}
+
+<slideshow-component class="slider-mobile-gutter info-carousel  {% if settings.scroll_appear == "fadein" %} fadeIn {% endif %}" role="region" aria-roledescription="{{ 'sections.slideshow.carousel' | t }}" aria-label="{{ section.settings.accessibility_info | escape }}">
+  <div class="slideshow banner banner--adapt grid grid--1-col slider slider--everywhere"
+    id="Slider-{{ section.id }}"
+    aria-live="polite"
+    aria-atomic="true"
+    data-autoplay="{{ section.settings.auto_rotate }}"
+    data-speed="{{ section.settings.change_slides_speed }}"
+  >
+    {%- for block in section.blocks -%}
+      <div class="slideshow__slide grid__item grid--1-col slider__slide"
+        id="Slide-{{ section.id }}-{{ forloop.index }}"
+        {{ block.shopify_attributes }}
+        role="group"
+        aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+        aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length}}"
+        tabindex="-1"
+      >
+        <div class="slideshow__text-wrapper banner__content page-width">
+          <div class="slideshow__text banner__box">
+            {%- case block.type -%}
+              {%- when 'testimonial_slide' -%}
+                <div class="testimonial-slide" id="block-section-{{ block.id }}" data-block-id="{{ block.id }}">
+                  {% if block.settings.display_icon %}<div class="slideshow_icon animated {{block.settings.slide_animation}}">{%- render 'icon-quote' -%}</div>{% endif %}
+                  <div class="slideshow_content">
+                    <div class="slideshow__quote animated {{block.settings.slide_animation}}">{{ block.settings.testimonial }}</div>
+                    <div class="slideshow__byline animated {{block.settings.slide_animation}}">{{ block.settings.byline }}</div>
+                  </div>
+                </div>
+
+                {% assign block_selector = '#block-section-' | append: block.id %}
+                {% style %}
+                #Slider-{{ section.id }} {{ block_selector }} .slideshow__quote.animated.active {
+                  animation-duration: {{block.settings.slide_animation_time}};
+                  animation-fill-mode: both;
+                  -webkit-animation-duration: {{block.settings.slide_animation_time}};
+                  -webkit-animation-fill-mode: both;
+                }
+                #Slider-{{ section.id }} {{ block_selector }} .slideshow__byline.animated.active {
+                  animation-duration: {{block.settings.slide_name_time}};
+                  animation-fill-mode: both;
+                  -webkit-animation-duration: {{block.settings.slide_name_time}};
+                  -webkit-animation-fill-mode: both;
+                }
+                #Slider-{{ section.id }} {{ block_selector }} .slideshow_icon.animated.active {
+                  animation-duration: {{block.settings.slide_icon_time}};
+                  animation-fill-mode: both;
+                  -webkit-animation-duration: {{block.settings.slide_icon_time}};
+                  -webkit-animation-fill-mode: both;
+                }
+                {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+                {{ block_selector }} .slideshow__quote p,
+                {{ block_selector }} .slideshow__byline p {
+                  color: {{ block.settings.text_color }};
+                }
+                {% endif %}
+
+                {% if block.settings.icon_color != 'rgba(0,0,0,0)' %}
+                {{ block_selector }} .slideshow_icon {
+                  color: {{ block.settings.icon_color }};
+                }
+                {% endif %}
+                {% endstyle %}
+
+              {%- when 'media_slide' -%}
+                {% assign img = block.settings.image %}
+                {% assign img_width = img.width | at_most: 300 %}
+                {% assign width_param = img_width | append: "x" %}
+
+                <div class="media-slide" id="block-section-{{ block.id }}" data-block-id="{{ block.id }}">
+                  <img src="{{ img | img_url: width_param }}"
+                        width="{{ img_width }}"
+                        height="{{ img_width | divided_by: img.aspect_ratio | ceil }}"
+                        alt="{{ img.alt | escape }}"
+                        loading="lazy"
+                  />
+                  <div class="slideshow__description">{{ block.settings.description }}</div>
+                  {%- if block.settings.button_label != blank -%}
+                    <div class="banner__buttons">
+                      <a{% if block.settings.button_link %} href="{{ block.settings.button_link }}"{% else %} role="link" aria-disabled="true"{% endif %} class="button button--{{ block.settings.button_style }}">{{ block.settings.button_label | escape }}</a>
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                {% assign block_selector = '#block-section-' | append: block.id %}
+                {% style %}
+                {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+                {{ block_selector }} .slideshow__description p {
+                  color: {{ block.settings.text_color }};
+                }
+                {% endif %}
+                {% endstyle %}
+
+            {%- endcase -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="slideshow__controls slider-buttons no-js-hidden">
+      <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}" aria-controls="Slider-{{ section.id }}">{% render 'icon-caret' %}</button>
+      <div class="slider-counter slider-counter--{{ section.settings.slider_visual }}{% if section.settings.slider_visual == 'counter' or section.settings.slider_visual == 'numbers' %} caption{% endif %}">
+        {%- if section.settings.slider_visual == 'counter' -%}
+          <span class="slider-counter--current">1</span>
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+          <span class="slider-counter--total">{{ section.blocks.size }}</span>
+        {%- else-%}
+          <div class="slideshow__control-wrapper">
+            {%- for block in section.blocks -%}
+              <button class="slider-counter__link slider-counter__link--{{ section.settings.slider_visual }} link" aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length}}" aria-controls="Slider-{{ section.id }}">
+                {%- if section.settings.slider_visual == 'numbers' -%}{{ forloop.index }}{% else %}<span class="dot"></span>{%- endif -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'sections.slideshow.next_slideshow' | t }}" aria-controls="Slider-{{ section.id }}">{% render 'icon-caret' %}</button>
+
+      {%- if section.settings.auto_rotate -%}
+        <button type="button" class="slideshow__autoplay slider-button no-js-hidden{% if section.settings.auto_rotate == false %} slideshow__autoplay--paused{% endif %}" aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}">
+          {%- render 'icon-pause' -%}
+          {%- render 'icon-play' -%}
+        </button>
+      {%- endif -%}
+    </div>
+
+    <noscript>
+      <div class="slider-buttons">
+        <div class="slider-counter">
+          {%- for block in section.blocks -%}
+            <a href="#Slide-{{ section.id }}-{{ forloop.index }}" class="slider-counter__link link" aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length}}">
+              {{ forloop.index }}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </noscript>
+  {%- endif -%}
+
+</slideshow-component>
+
+{%- if request.design_mode -%}
+  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% assign section_selector = '#shopify-section-' | append: section.id %}
+{% style %}
+  @media screen and (max-width: 750px) {
+    {{ section_selector }} .info-carousel {
+      padding: {{ section.settings.mobile_top_padding }}px 0 {{ section.settings.mobile_bottom_padding }}px;
+      {% if section.settings.background_mobile_image %}
+      background-image: url({{ section.settings.background_mobile_image | img_url: 'master' }});
+      {% endif %}
+      background-color: {{ section.settings.background_color }};
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  @media screen and (min-width: 749px) {
+    {{ section_selector }} .info-carousel {
+      padding: {{ section.settings.desktop_top_padding }}px 0 {{ section.settings.desktop_bottom_padding }}px;
+      {% if section.settings.background_desktop_image %}
+      background-image: url({{ section.settings.background_desktop_image | img_url: 'master' }});
+      {% endif %}
+      background-color: {{ section.settings.background_color }};
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Information carousel",
+  "tag": "section",
+  "class": "spaced-section spaced-section--full-width",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section customization"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_desktop_image",
+      "label": "Desktop background image",
+      "info": "Optional"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_mobile_image",
+      "label": "Mobile background image",
+      "info": "Optional"
+    },
+    {
+      "type": "header",
+      "content": "Slider customization"
+    },
+    {
+      "type": "select",
+      "id": "slider_visual",
+      "options": [
+        {
+          "value": "dots",
+          "label": "Dots"
+        },
+        {
+          "value": "counter",
+          "label": "Counter"
+        },
+        {
+          "value": "numbers",
+          "label": "Numbers"
+        }
+      ],
+      "default": "dots",
+      "label": "Pagination style"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 3,
+      "max": 9,
+      "step": 2,
+      "unit": "s",
+      "label": "Change slider speed",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Accessibility"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_info",
+      "label": "Slideshow description",
+      "info": "Describe the slideshow for customers using screen readers.",
+      "default": "Slideshow about our brand"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "number",
+      "id": "desktop_top_padding",
+      "label": "Desktop top padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "desktop_bottom_padding",
+      "label": "Desktop bottom padding (px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "mobile_top_padding",
+      "label": "Mobile top padding (px)",
+      "default": 45
+    },
+    {
+      "type": "number",
+      "id": "mobile_bottom_padding",
+      "label": "Mobile bottom padding (px)",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial_slide",
+      "name": "Testimonial",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "select",
+          "id": "slide_animation",
+          "options":[
+            {
+              "value": "fadeIn",
+              "label": "Fade In"
+            },
+            {
+              "value": "fadeInUp",
+              "label": "Fade In Up"
+            },
+            {
+              "value": "NoEffect",
+              "label": "No Effect"
+            }
+          ],
+          "default": "NoEffect",
+          "label": "Select Slide Animation"
+        },
+        {
+          "type": "richtext",
+          "id": "testimonial",
+          "label": "Testimonial",
+          "default": "<p>Provide a quote for the content of the slide.</p>"
+        },
+        {
+          "type": "text",
+          "id": "slide_animation_time",
+          "default": "0.2s",
+          "label": "Testimonial Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        },
+        {
+          "type": "richtext",
+          "id": "byline",
+          "label": "Byline",
+          "default": "<p>Provide a source for the content of the slide.</p>"
+        },
+        {
+          "type": "text",
+          "id": "slide_name_time",
+          "default": "0.2s",
+          "label": "Byline Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#000000"
+        },
+        {
+          "type": "checkbox",
+          "id": "display_icon",
+          "label": "Display icon?",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "slide_icon_time",
+          "default":"0.2s",
+          "label": "Icon Animation Time",
+          "info": "Must be a number and include 's' at the end. (Example, 0.2s)"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color"
+        }
+      ]
+    },
+    {
+      "type": "media_slide",
+      "name": "Media",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Give customers details about the content of the slide.</p>"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "info": "Leave blank if button is not desired."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "tertiary",
+              "label": "Tertiary"
+            },
+            {
+              "value": "link-1",
+              "label": "Link style 1"
+            },
+            {
+              "value": "link-2",
+              "label": "Link style 2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Information carousel",
+      "blocks": [
+        {
+          "type": "testimonial_slide"
+        },
+        {
+          "type": "testimonial_slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

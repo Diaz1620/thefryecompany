@@ -1,0 +1,139 @@
+<div class="image-with-text__text-item grid__item">
+  <div id="ImageWithText--{{ section.id }}"
+      class="image-with-text__content
+      {% if section.settings.section_padding == 'none' %} page-width{% endif %}
+      image-with-text__content--{{ section.settings.desktop_content_position }}
+      image-with-text__content--desktop-{{ section.settings.desktop_content_alignment }}
+      image-with-text__content--mobile-{{ section.settings.mobile_content_alignment }}
+      image-with-text__content--{{ section.settings.height }}">
+    {%- for block in blocks -%}
+      {% case block.type %}
+        {%- when 'eyebrow' -%}
+          <div class="image-with-text__eyebrow {{ block.settings.eyebrow_style }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}">
+            <span>{{ block.settings.text | escape }}</span>
+          </div>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+          {{ block_selector }}.image-with-text__eyebrow {
+            color: {{ block.settings.text_color }};
+          }
+          {% endif %}
+          {% endstyle %}
+
+        {%- when 'heading' -%}
+          <h2 class="image-with-text__heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}">
+            {{ block.settings.heading | escape }}
+          </h2>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {% if block.settings.heading_color != 'rgba(0,0,0,0)' %}
+          {{ block_selector }}.image-with-text__heading {
+            color: {{ block.settings.heading_color }};
+          }
+          {% endif %}
+          {% endstyle %}
+
+        {%- when 'caption' -%}
+          <p class="image-with-text__text image-with-text__text--caption {{ block.settings.text_style }} {{ block.settings.text_style }}--{{ block.settings.text_size }} {{ block.settings.text_style }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}">
+            {{ block.settings.caption | escape }}
+          </p>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+          {{ block_selector }}.image-with-text__text {
+            color: {{ block.settings.text_color }};
+          }
+          {% endif %}
+          {% endstyle %}
+
+        {%- when 'text' -%}
+          <div class="image-with-text__text rte {{ block.settings.text_style }}" {{ block.shopify_attributes }} id="block-section-{{ block.id }}">{{ block.settings.text }}</div>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {{ block_selector }}.image-with-text__text {
+            {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+              color: {{ block.settings.text_color }};
+            {% endif %}
+          }
+          {% endstyle %}
+
+        {%- when 'button' -%}
+          <div class="image-with-text__button-wrapper {% if block.settings.show_side_by_side %}side-by-side{% endif %}" {{ block.shopify_attributes }} data-block-id="{{ block.id }}" id="block-section-{{ block.id }}">
+          {%- if block.settings.button_label_1 != blank -%}
+              {% assign showArrow1 = '' %}
+              {% if block.settings.button_style_1 contains 'link-1' %}
+                {% assign showArrow1 = 'right' %}
+              {% endif %}
+
+              {% render 'button',
+                label: block.settings.button_label_1,
+                link: block.settings.button_link_1,
+                variation: block.settings.button_style_1,
+                arrow: showArrow1,
+                class: "image-with-text__button"
+              %}
+          {%- endif -%}
+
+          {%- if block.settings.button_label_2 != blank -%}
+            {% if block.settings.show_separator %}
+              <span class="image-with-text__button-separator">|</span>
+            {% endif %}
+
+            {% assign showArrow2 = '' %}
+            {% if block.settings.button_style_2 contains 'link-1' %}
+              {% assign showArrow2 = 'right' %}
+            {% endif %}
+
+            {% render 'button',
+              label: block.settings.button_label_2,
+              link: block.settings.button_link_2,
+              variation: block.settings.button_style_2,
+              arrow: showArrow2,
+              class: "image-with-text__button"
+            %}
+          {%- endif -%}
+          </div>
+
+          {% assign block_selector = '#block-section-' | append: block.id %}
+          {% style %}
+          {{ block_selector }}.image-with-text__button-wrapper {
+            {% if block.settings.show_side_by_side %}
+              flex-direction: row;
+              justify-content: space-between;
+              flex-wrap: nowrap;
+            {% endif %}
+          }
+
+          @media screen and (max-width: 989px) {
+            {{ block_selector }}.image-with-text__button-wrapper {
+              {% if block.settings.show_side_by_side %}
+                flex-direction: column;
+                justify-content: center;
+                flex-wrap: wrap;
+              {% endif %}
+            }
+          }
+
+          {{ block_selector }}.image-with-text__button-wrapper .image-with-text__button-separator {
+            {% if block.settings.show_side_by_side %}
+              color: {{ block.settings.separator_color }};
+            {% endif %}
+          }
+          {% endstyle %}
+
+
+        {%- when 'padding' -%}
+          {% render 'padding',
+            id: block.id,
+            mobile_padding_amount: block.settings.mobile_padding_amount,
+            desktop_padding_amount: block.settings.desktop_padding_amount
+          %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
