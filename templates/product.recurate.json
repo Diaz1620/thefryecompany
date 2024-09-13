@@ -1,1 +1,332 @@
-{"wrapper":"div.pdp-default-wrapper","sections":{"1713187447681ee19c":{"type":"apps","blocks":{"recurate_resale_made_easy_recurate_product_AzUgUA":{"type":"shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product\/ee87d27a-f9c1-4c7a-907d-dd480fe70354","settings":{"text_program":"PRE-LOVED","images_style":"bottom","title_text":"<p>Final sale<\/p>","description":false,"var_layout":"verbose"}},"recurate_resale_made_easy_recurate_product_content_Wn6E9W":{"type":"shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product-content\/ee87d27a-f9c1-4c7a-907d-dd480fe70354","settings":{"accordion1_title":"DESCRIPTION","accordion1_content":"<p>[description]<\/p>","accordion2_title":"DETAILS","accordion2_content":"<p>{{ product.metafields.cql.details | metafield_tag }}<\/p>","accordion3_title":"ABOUT THE FRYE EXCHANGE","accordion3_content":"<p>While all our products are built to last, we know that styles and moods change. That's why we have created The Frye Exchange - a one-stop destination with a focus on sustainability and extending the lifecycle of every pair of Fryes. A place where Frye lovers can get together to sell and buy pre-loved styles.<br\/><br\/><a href=\"\/pages\/the-frye-exchange\" title=\"The Frye Exchange\">Learn more...<\/a><\/p>","accord_title_size":"16px","accord_title_font":"'sweet-sans-pro', 'Arial', 'sans-serif'","accords_under_images":false,"program_description1_title":"","program_description1_content":"","program_description1_cta_text":"","program_description1_cta_url":"shopify:\/\/pages\/the-frye-exchange","program_description2_title":"","program_description2_content":"","program_description2_cta_text":"","program_description2_cta_url":"","program_title_font":"","program_title_size":"","buttons_size":"","buttons_bg":"","buttons_color":"","buttons_border":"","buttons_width":"","program_bottom":false}},"recurate_resale_made_easy_recurate_product_styles_YpYBXb":{"type":"shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product-styles\/ee87d27a-f9c1-4c7a-907d-dd480fe70354","settings":{"content_spacing":"small","program_font":"","program_size":"","program_line_height":"","program_color":"","title_font":"","title_size":"","title_line_height":"","title_text_font":"","title_text_size":"","title_text_color":"","price_compare":true,"pricing_font":"","pricing_size":"","buttons_font":"","buttons_size":"","buttons_bg":"#000000","buttons_color":"#ffffff","buttons_border":"","buttons_width":""}},"recurate_resale_made_easy_recurate_page_custom_4BUt6b":{"type":"shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-page-custom\/ee87d27a-f9c1-4c7a-907d-dd480fe70354","settings":{"spacing_top":true,"spacing_bottom":true,"content_rich":"","content_html":"<style>\n.r-app-wrap .r-pdp-image-featured img {\n  max-height: 1000px !important;\n}\n.r-app-wrap .r-pdp-images .r-pdp-image-other {\n  max-height: 180px !important;\n}\n.r-slider-thumbs-navigation-wrapper {\n  height: 250px !important;\n}\n.r-app-wrap .r-pdp-images.r-pdp-images-bottom .r-pdp-images-other {\n  height: 250px !important;\n}\n.r-pdp-right-inner {\n  padding-left: 30px;\n}\n.r-app-wrap .r-pdp-accordion .r-pdp-accordion-title {\n   border-top: .1rem solid var(--color-border);\n   border-bottom: .1rem solid var(--color-border);\n   font-weight: 500;\n}\n<\/style>","bgcolor":"#f8f6f1"}},"recurate_resale_made_easy_recurate_sellers_closet_W6tc4F":{"type":"shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-sellers-closet\/ee87d27a-f9c1-4c7a-907d-dd480fe70354","settings":{"closet_bgcolor":"#f5f5f5","avatar_bgcolor":"#7b3f2a","avatar_color":"#ffffff","avatar_font":"","seller_color":"#000000","seller_font":""}}},"block_order":["recurate_resale_made_easy_recurate_product_AzUgUA","recurate_resale_made_easy_recurate_product_content_Wn6E9W","recurate_resale_made_easy_recurate_product_styles_YpYBXb","recurate_resale_made_easy_recurate_page_custom_4BUt6b","recurate_resale_made_easy_recurate_sellers_closet_W6tc4F"],"settings":{"include_margins":true}},"shogun-helper":{"type":"shogun-helper","disabled":true,"settings":{}},"shogun-above":{"type":"shogun-above","disabled":true,"settings":{}},"main":{"type":"main-product","blocks":{"vendor":{"type":"text","settings":{"text":"{{ product.metafields.cql.gender.value }}"}},"title":{"type":"title","settings":{}},"c1fa7ef7-1b07-456f-a987-41d5a54b7e01":{"type":"shopify:\/\/apps\/yotpo-product-reviews-ugc\/blocks\/star-rating\/eb7dfd7d-db44-4334-bc49-c893b51b36cf","settings":{"product":"{{product}}"}},"price":{"type":"price","settings":{}},"48446a5f-070b-48f9-a787-62e69b38e404":{"type":"final_sale","settings":{}},"9b23f825-4fc6-4f47-9027-2450589ab2ad":{"type":"badge_label","settings":{"badge_label_color":"#7b3f2a"}},"e72fe689-767e-4ef2-8086-f86e9e1d5726":{"type":"short_description","settings":{}},"f64c22f1-288a-4b4d-8c9f-c10514bc2f6d":{"type":"separator","settings":{}},"c7caa4c0-ada8-4157-82e3-40aa32f26f06":{"type":"featured_description","settings":{"featured_description":""}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","show_swatches":true,"show_helpers":true}},"e6f0e825-ef9a-43fc-937e-5fac51fff61b":{"type":"shopify:\/\/apps\/true-fit\/blocks\/widget\/caa08c3b-c601-47cd-9c2a-32bb0567b191","settings":{}},"quantity_selector":{"type":"quantity_selector","settings":{"show_quantity":false}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":true}},"926193cc-e120-48b9-ac87-3ac9021e9b6c":{"type":"shopify:\/\/apps\/authentic-membership\/blocks\/authentic-popup\/40d9241f-9e49-479f-8d41-7a09e8b9e9c7","disabled":true,"settings":{"enable_darkmode":false,"enable_above_express":false,"redirect_to_cart":true,"margin_top":0,"margin_bottom":0,"custom_css":".authentic-banner-section,\n.authentic-savings-widget {\nmax-width:100%\n}"}},"48ce68be-9afa-47ed-bb2a-3103c31efc62":{"type":"checkbox_product","settings":{"checkbox_value":true}},"2d8aed3e-78e9-4f43-aa5e-a8feb5c9819e":{"type":"collapsible_tab","settings":{"heading":"DESCRIPTION","content":"","page":""}},"bd3e07f9-0382-4943-bd9e-cf519ceb5e3d":{"type":"collapsible_tab","settings":{"heading":"DETAILS","content":"","page":""}},"c1b7e763-5646-484d-b5a9-c7075abd3bf9":{"type":"addon_product","settings":{"addon_title":"STYLE IT WITH"}}},"block_order":["vendor","title","c1fa7ef7-1b07-456f-a987-41d5a54b7e01","price","48446a5f-070b-48f9-a787-62e69b38e404","9b23f825-4fc6-4f47-9027-2450589ab2ad","e72fe689-767e-4ef2-8086-f86e9e1d5726","f64c22f1-288a-4b4d-8c9f-c10514bc2f6d","c7caa4c0-ada8-4157-82e3-40aa32f26f06","variant_picker","e6f0e825-ef9a-43fc-937e-5fac51fff61b","quantity_selector","buy_buttons","926193cc-e120-48b9-ac87-3ac9021e9b6c","48ce68be-9afa-47ed-bb2a-3103c31efc62","2d8aed3e-78e9-4f43-aa5e-a8feb5c9819e","bd3e07f9-0382-4943-bd9e-cf519ceb5e3d","c1b7e763-5646-484d-b5a9-c7075abd3bf9"],"disabled":true,"settings":{"enable_sticky_info":true,"gallery_layout":"stacked","show_image_border":false,"media_size":"medium","mobile_thumbnails":"show","hide_variants":true,"enable_video_looping":false,"recurate_banner_heading":"What is the FRYE Exchange?","recurate_banner_richtext":"<p>While all our products are built to last, we know that styles and moods change.      That's why we have created The Frye Exchange - a one-stop destination with      a focus on sustainability and extending the lifecycle of every pair of Fryes. A      place where Frye lovers can get together to sell and buy pre-loved styles.<\/p>","recurate_banner_cta":"shopify:\/\/pages\/contact","recurate_banner_image":"shopify:\/\/shop_images\/frye-exchange-logo.png"}},"09f7341e-4e27-4c65-8e67-84f99acb0b47":{"type":"bluecore","disabled":true,"settings":{"bluecore_elements":"<div id=\"bc-recommended-for-you\"><\/div>"}},"product-recommendations":{"type":"product-recommendations","disabled":true,"settings":{"eyebrow":"","eyebrow_style":"frye-eyebrow","heading":"RECOMMENDED FOR YOU","heading_size":"frye-headline-2","description":"","description_style":"frye-body","animation":"fadeInUp","animation_time":"5s","text_color":"#000000","background_color":"","image_ratio":"adapt","image_hover":"noeffect","show_secondary_image":true,"add_image_padding":false,"show_image_outline":false,"show_vendor":false,"show_rating":true,"show_product_labels":true,"desktop_top_padding":35,"desktop_bottom_padding":25,"mobile_top_padding":0,"mobile_bottom_padding":25}},"shogun-below":{"type":"shogun-below","disabled":true,"settings":{}},"nosto_product":{"type":"nosto-product","disabled":true,"settings":{}}},"order":["1713187447681ee19c","shogun-helper","shogun-above","main","09f7341e-4e27-4c65-8e67-84f99acb0b47","product-recommendations","shogun-below","nosto_product"]}
+{
+  "wrapper": "div.pdp-default-wrapper",
+  "sections": {
+    "1713187447681ee19c": {
+      "type": "apps",
+      "blocks": {
+        "recurate_resale_made_easy_recurate_product_AzUgUA": {
+          "type": "shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product\/ee87d27a-f9c1-4c7a-907d-dd480fe70354",
+          "settings": {
+            "text_program": "PRE-LOVED",
+            "images_style": "bottom",
+            "title_text": "<p>Final sale<\/p>",
+            "description": false,
+            "var_layout": "verbose"
+          }
+        },
+        "recurate_resale_made_easy_recurate_product_content_Wn6E9W": {
+          "type": "shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product-content\/ee87d27a-f9c1-4c7a-907d-dd480fe70354",
+          "settings": {
+            "accordion1_title": "DESCRIPTION",
+            "accordion1_content": "<p>[description]<\/p>",
+            "accordion2_title": "DETAILS",
+            "accordion2_content": "<p>{{ product.metafields.cql.details | metafield_tag }}<\/p>",
+            "accordion3_title": "ABOUT THE FRYE EXCHANGE",
+            "accordion3_content": "<p>While all our products are built to last, we know that styles and moods change. That's why we have created The Frye Exchange - a one-stop destination with a focus on sustainability and extending the lifecycle of every pair of Fryes. A place where Frye lovers can get together to sell and buy pre-loved styles.<br\/><br\/><a href=\"\/pages\/the-frye-exchange\" title=\"The Frye Exchange\">Learn more...<\/a><\/p>",
+            "accord_title_size": "16px",
+            "accord_title_font": "'sweet-sans-pro', 'Arial', 'sans-serif'",
+            "accords_under_images": false,
+            "program_description1_title": "",
+            "program_description1_content": "",
+            "program_description1_cta_text": "",
+            "program_description1_cta_url": "shopify:\/\/pages\/the-frye-exchange",
+            "program_description2_title": "",
+            "program_description2_content": "",
+            "program_description2_cta_text": "",
+            "program_description2_cta_url": "",
+            "program_title_font": "",
+            "program_title_size": "",
+            "buttons_size": "",
+            "buttons_bg": "",
+            "buttons_color": "",
+            "buttons_border": "",
+            "buttons_width": "",
+            "program_bottom": false
+          }
+        },
+        "recurate_resale_made_easy_recurate_product_styles_YpYBXb": {
+          "type": "shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-product-styles\/ee87d27a-f9c1-4c7a-907d-dd480fe70354",
+          "settings": {
+            "content_spacing": "small",
+            "program_font": "",
+            "program_size": "",
+            "program_line_height": "",
+            "program_color": "",
+            "title_font": "",
+            "title_size": "",
+            "title_line_height": "",
+            "title_text_font": "",
+            "title_text_size": "",
+            "title_text_color": "",
+            "price_compare": true,
+            "pricing_font": "",
+            "pricing_size": "",
+            "buttons_font": "",
+            "buttons_size": "",
+            "buttons_bg": "#000000",
+            "buttons_color": "#ffffff",
+            "buttons_border": "",
+            "buttons_width": ""
+          }
+        },
+        "recurate_resale_made_easy_recurate_page_custom_4BUt6b": {
+          "type": "shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-page-custom\/ee87d27a-f9c1-4c7a-907d-dd480fe70354",
+          "settings": {
+            "spacing_top": true,
+            "spacing_bottom": true,
+            "content_rich": "",
+            "content_html": "<style>\n.r-app-wrap .r-pdp-image-featured img {\n  max-height: 1000px !important;\n}\n@media screen and (max-width: 767px) {\n   .r-ab .r-pdp-var-inner.r-flex {\n      flex-direction: column;\n   }\n}\n\n.r-app-wrap .r-pdp-images .r-pdp-image-other {\n  max-height: 180px !important;\n}\n.r-slider-thumbs-navigation-wrapper {\n  height: 250px !important;\n}\n.r-app-wrap .r-pdp-images.r-pdp-images-bottom .r-pdp-images-other {\n  height: 250px !important;\n}\n.r-pdp-right-inner {\n  padding-left: 30px;\n}\n.r-app-wrap .r-pdp-accordion .r-pdp-accordion-title {\n   border-top: .1rem solid var(--color-border);\n   border-bottom: .1rem solid var(--color-border);\n   font-weight: 500;\n}\n.r-ab .r-justify-between {\n  align-items: center;\n}\n<\/style>",
+            "bgcolor": "#f8f6f1"
+          }
+        },
+        "recurate_resale_made_easy_recurate_sellers_closet_W6tc4F": {
+          "type": "shopify:\/\/apps\/recurate-resale-made-easy\/blocks\/recurate-sellers-closet\/ee87d27a-f9c1-4c7a-907d-dd480fe70354",
+          "settings": {
+            "closet_bgcolor": "#f5f5f5",
+            "avatar_bgcolor": "#7b3f2a",
+            "avatar_color": "#ffffff",
+            "avatar_font": "",
+            "seller_color": "#000000",
+            "seller_font": "",
+            "discount_banner": true,
+            "discount_bg": "#474747",
+            "discount_text": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "recurate_resale_made_easy_recurate_product_AzUgUA",
+        "recurate_resale_made_easy_recurate_product_content_Wn6E9W",
+        "recurate_resale_made_easy_recurate_product_styles_YpYBXb",
+        "recurate_resale_made_easy_recurate_page_custom_4BUt6b",
+        "recurate_resale_made_easy_recurate_sellers_closet_W6tc4F"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "shogun-helper": {
+      "type": "shogun-helper",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "shogun-above": {
+      "type": "shogun-above",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.metafields.cql.gender.value }}"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "c1fa7ef7-1b07-456f-a987-41d5a54b7e01": {
+          "type": "shopify:\/\/apps\/yotpo-product-reviews-ugc\/blocks\/star-rating\/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "48446a5f-070b-48f9-a787-62e69b38e404": {
+          "type": "final_sale",
+          "settings": {
+          }
+        },
+        "9b23f825-4fc6-4f47-9027-2450589ab2ad": {
+          "type": "badge_label",
+          "settings": {
+            "badge_label_color": "#7b3f2a"
+          }
+        },
+        "e72fe689-767e-4ef2-8086-f86e9e1d5726": {
+          "type": "short_description",
+          "settings": {
+          }
+        },
+        "f64c22f1-288a-4b4d-8c9f-c10514bc2f6d": {
+          "type": "separator",
+          "settings": {
+          }
+        },
+        "c7caa4c0-ada8-4157-82e3-40aa32f26f06": {
+          "type": "featured_description",
+          "settings": {
+            "featured_description": ""
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "show_swatches": true,
+            "show_helpers": true
+          }
+        },
+        "e6f0e825-ef9a-43fc-937e-5fac51fff61b": {
+          "type": "shopify:\/\/apps\/true-fit\/blocks\/widget\/caa08c3b-c601-47cd-9c2a-32bb0567b191",
+          "settings": {
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "show_quantity": false
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "926193cc-e120-48b9-ac87-3ac9021e9b6c": {
+          "type": "shopify:\/\/apps\/authentic-membership\/blocks\/authentic-popup\/40d9241f-9e49-479f-8d41-7a09e8b9e9c7",
+          "disabled": true,
+          "settings": {
+            "enable_darkmode": false,
+            "placed_in_pdp": false,
+            "enable_above_express": false,
+            "redirect_to_cart": true,
+            "margin_top": 0,
+            "margin_bottom": 0,
+            "custom_css": ".authentic-banner-section,\n.authentic-savings-widget {\nmax-width:100%\n}"
+          }
+        },
+        "48ce68be-9afa-47ed-bb2a-3103c31efc62": {
+          "type": "checkbox_product",
+          "settings": {
+            "checkbox_value": true
+          }
+        },
+        "2d8aed3e-78e9-4f43-aa5e-a8feb5c9819e": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "DESCRIPTION",
+            "content": "",
+            "page": ""
+          }
+        },
+        "bd3e07f9-0382-4943-bd9e-cf519ceb5e3d": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "DETAILS",
+            "content": "",
+            "page": ""
+          }
+        },
+        "c1b7e763-5646-484d-b5a9-c7075abd3bf9": {
+          "type": "addon_product",
+          "settings": {
+            "addon_title": "STYLE IT WITH"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "c1fa7ef7-1b07-456f-a987-41d5a54b7e01",
+        "price",
+        "48446a5f-070b-48f9-a787-62e69b38e404",
+        "9b23f825-4fc6-4f47-9027-2450589ab2ad",
+        "e72fe689-767e-4ef2-8086-f86e9e1d5726",
+        "f64c22f1-288a-4b4d-8c9f-c10514bc2f6d",
+        "c7caa4c0-ada8-4157-82e3-40aa32f26f06",
+        "variant_picker",
+        "e6f0e825-ef9a-43fc-937e-5fac51fff61b",
+        "quantity_selector",
+        "buy_buttons",
+        "926193cc-e120-48b9-ac87-3ac9021e9b6c",
+        "48ce68be-9afa-47ed-bb2a-3103c31efc62",
+        "2d8aed3e-78e9-4f43-aa5e-a8feb5c9819e",
+        "bd3e07f9-0382-4943-bd9e-cf519ceb5e3d",
+        "c1b7e763-5646-484d-b5a9-c7075abd3bf9"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_sticky_info": true,
+        "gallery_layout": "stacked",
+        "show_image_border": false,
+        "media_size": "medium",
+        "mobile_thumbnails": "show",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "recurate_banner_heading": "What is the FRYE Exchange?",
+        "recurate_banner_richtext": "<p>While all our products are built to last, we know that styles and moods change.      That's why we have created The Frye Exchange - a one-stop destination with      a focus on sustainability and extending the lifecycle of every pair of Fryes. A      place where Frye lovers can get together to sell and buy pre-loved styles.<\/p>",
+        "recurate_banner_cta": "shopify:\/\/pages\/contact",
+        "recurate_banner_image": "shopify:\/\/shop_images\/frye-exchange-logo.png"
+      }
+    },
+    "09f7341e-4e27-4c65-8e67-84f99acb0b47": {
+      "type": "bluecore",
+      "disabled": true,
+      "settings": {
+        "bluecore_elements": "<div id=\"bc-recommended-for-you\"><\/div>"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "",
+        "eyebrow_style": "frye-eyebrow",
+        "heading": "RECOMMENDED FOR YOU",
+        "heading_size": "frye-headline-2",
+        "description": "",
+        "description_style": "frye-body",
+        "animation": "fadeInUp",
+        "animation_time": "5s",
+        "text_color": "#000000",
+        "background_color": "",
+        "image_ratio": "adapt",
+        "image_hover": "noeffect",
+        "show_secondary_image": true,
+        "add_image_padding": false,
+        "show_image_outline": false,
+        "show_vendor": false,
+        "show_rating": true,
+        "show_product_labels": true,
+        "desktop_top_padding": 35,
+        "desktop_bottom_padding": 25,
+        "mobile_top_padding": 0,
+        "mobile_bottom_padding": 25
+      }
+    },
+    "shogun-below": {
+      "type": "shogun-below",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "nosto_product": {
+      "type": "nosto-product",
+      "disabled": true,
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "1713187447681ee19c",
+    "shogun-helper",
+    "shogun-above",
+    "main",
+    "09f7341e-4e27-4c65-8e67-84f99acb0b47",
+    "product-recommendations",
+    "shogun-below",
+    "nosto_product"
+  ]
+}
